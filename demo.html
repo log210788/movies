@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Lesson Notes Demo | Louie's English Sanctuary</title>
+
+  <!-- Google Fonts: Cormorant Garamond (Literary Serif), Plus Jakarta Sans (Soft Modern UI), JetBrains Mono (Timestamps & IPA) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            parchment: {
+              50: '#fbf9f5',
+              100: '#f6f1e7',
+              200: '#ede3d1',
+              300: '#dfd0b5',
+              400: '#cbb38e',
+              500: '#b6966b',
+            },
+            autumn: {
+              50: '#fcf6f0',
+              100: '#f7e9db',
+              200: '#eed0b5',
+              300: '#e2b086',
+              400: '#d38c57',
+              500: '#be6f38',
+              600: '#a3582b',
+              700: '#854524',
+              800: '#6c3921',
+            },
+            sage: {
+              50: '#f4f7f5',
+              100: '#e4ece7',
+              200: '#cadad1',
+              300: '#a5bfb1',
+              400: '#7b9f8d',
+              500: '#5b826f',
+              600: '#476858',
+              700: '#3a5448',
+              800: '#30443b',
+            },
+            slatewarm: {
+              700: '#3d4441',
+              800: '#2b312e',
+              900: '#1e2321',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- GSAP for Gentle Animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- Popper & Tippy.js for Interactive Vocabulary Explanations -->
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src="https://unpkg.com/tippy.js@6"></script>
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/shift-away.css" />
+
+  <!-- Canvas Confetti for Interactive Practice -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg-base: #f9f6f0;
+      --bg-card: rgba(255, 253, 249, 0.92);
+      --bg-subcard: rgba(255, 255, 255, 0.95);
+      --border-soft: #e6decb;
+      --border-accent: #d9c8b0;
+      --text-main: #2b312e;
+      --text-muted: #5c6660;
+      --grad-1: rgba(238, 208, 181, 0.42);
+      --grad-2: rgba(202, 218, 209, 0.48);
+      --grad-3: rgba(246, 241, 231, 0.70);
+    }
+
+    body[data-theme="winchester"] {
+      --bg-base: #f3f6f5;
+      --bg-card: rgba(252, 254, 253, 0.91);
+      --bg-subcard: rgba(255, 255, 255, 0.95);
+      --border-soft: #d7e2dc;
+      --border-accent: #b8ccc2;
+      --text-main: #26312d;
+      --text-muted: #52635c;
+      --grad-1: rgba(202, 218, 209, 0.50);
+      --grad-2: rgba(219, 228, 238, 0.48);
+      --grad-3: rgba(244, 240, 230, 0.55);
+    }
+
+    body[data-theme="twilight"] {
+      --bg-base: #f5efe6;
+      --bg-card: rgba(253, 249, 242, 0.92);
+      --bg-subcard: rgba(255, 252, 247, 0.96);
+      --border-soft: #e2d2be;
+      --border-accent: #cfaea0;
+      --text-main: #2d2622;
+      --text-muted: #665850;
+      --grad-1: rgba(226, 176, 134, 0.36);
+      --grad-2: rgba(214, 196, 176, 0.42);
+      --grad-3: rgba(235, 220, 202, 0.55);
+    }
+
+    body {
+      background-color: var(--bg-base);
+      background-image:
+        radial-gradient(at 8% 5%, var(--grad-1) 0px, transparent 52%),
+        radial-gradient(at 92% 18%, var(--grad-2) 0px, transparent 52%),
+        radial-gradient(at 50% 88%, var(--grad-3) 0px, transparent 58%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      transition: background-color 0.5s ease, color 0.4s ease;
+      overflow-x: hidden;
+    }
+
+    .sanctuary-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 12px 36px -10px rgba(91, 130, 111, 0.08), 0 4px 14px -3px rgba(43, 49, 46, 0.04);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sanctuary-subcard {
+      background: var(--bg-subcard);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 4px 14px -4px rgba(43, 49, 46, 0.04);
+      transition: all 0.25s ease;
+    }
+
+    /* Inline Vocabulary Highlight in Transcript */
+    .vocab-mark {
+      display: inline-block;
+      background: linear-gradient(120deg, rgba(226, 176, 134, 0.28) 0%, rgba(165, 191, 177, 0.30) 100%);
+      border-bottom: 2px dashed #a3582b;
+      color: #5b3216;
+      font-weight: 600;
+      padding: 0px 5px;
+      margin: 0 1px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .vocab-mark:hover, .vocab-mark.active-vocab {
+      background: linear-gradient(120deg, rgba(190, 111, 56, 0.25) 0%, rgba(91, 130, 111, 0.32) 100%);
+      border-bottom-style: solid;
+      border-bottom-color: #476858;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(163, 88, 43, 0.14);
+    }
+
+    body.hide-vocab-highlights .vocab-mark {
+      background: transparent !important;
+      border-bottom: none !important;
+      color: inherit !important;
+      font-weight: inherit !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+    }
+
+    /* Note-taker fix badge */
+    .asr-fix-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f4f7f5;
+      color: #476858;
+      border: 1px solid #cadad1;
+      padding: 1px 7px;
+      border-radius: 999px;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    body.hide-asr-fixes .asr-fix-pill {
+      display: none !important;
+    }
+
+    /* Custom Tippy Tooltip Theme: Peaceful Autumn */
+    .tippy-box[data-theme~='autumn-sanctuary'] {
+      background-color: #fffdf9;
+      color: #2b312e;
+      border: 1px solid #dfd0b5;
+      border-radius: 1rem;
+      box-shadow: 0 20px 38px -8px rgba(61, 68, 65, 0.16), 0 6px 16px -4px rgba(163, 88, 43, 0.08);
+      padding: 0.35rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .tippy-box[data-theme~='autumn-sanctuary'][data-placement^='top'] > .tippy-arrow::before {
+      border-top-color: #dfd0b5;
+    }
+    .tippy-box[data-theme~='autumn-sanctuary'][data-placement^='bottom'] > .tippy-arrow::before {
+      border-bottom-color: #dfd0b5;
+    }
+
+    @keyframes gentleGlow {
+      0% { background-color: rgba(226, 176, 134, 0.45); transform: scale(1.005); }
+      50% { background-color: rgba(165, 191, 177, 0.38); }
+      100% { background-color: transparent; transform: scale(1); }
+    }
+    .turn-highlight-flash {
+      animation: gentleGlow 2.8s ease-out;
+    }
+
+    @media print {
+      .no-print, #autumn-breeze-canvas { display: none !important; }
+      body { background: #fff !important; }
+      .sanctuary-card, .sanctuary-subcard { box-shadow: none !important; border: 1px solid #ccc !important; }
+    }
+  </style>
+</head>
+<body data-theme="kensington" class="font-sans antialiased min-h-screen selection:bg-autumn-200 selection:text-slatewarm-900 relative">
+
+  <!-- CALMING LONDON AUTUMN BREEZE CANVAS OVERLAY -->
+  <canvas id="autumn-breeze-canvas" class="fixed inset-0 pointer-events-none z-20 opacity-80"></canvas>
+
+  <!-- PROSPECTIVE STUDENT DEMO NOTICE BAR -->
+  <aside class="bg-gradient-to-r from-sage-800 via-sage-700 to-autumn-700 text-white text-xs py-2 px-4 text-center font-medium shadow-sm relative z-50 flex items-center justify-center gap-2 flex-wrap">
+    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/20 text-white font-mono text-[11px] font-bold">
+      ✨ Interactive Sample
+    </span>
+    <span>This is a live interactive preview of the personalized lesson companion you receive after every class with Louie.</span>
+    <a href="#how-it-works" class="underline font-semibold hover:text-parchment-100 transition ml-1">See How It Works ↓</a>
+  </aside>
+
+  <!-- STICKY PEACEFUL NAVIGATION & ATMOSPHERE BAR -->
+  <header class="sticky top-0 z-40 border-b border-[#e6decb]/90 bg-[#fbf9f5]/85 backdrop-blur-md no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-sage-600 via-sage-500 to-autumn-500 flex items-center justify-center text-white font-serif text-xl font-bold shadow-sm">
+          L
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-serif font-bold text-lg sm:text-xl tracking-tight text-slatewarm-900">Louie's English Studio</span>
+            <span class="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 text-[11px] font-medium rounded-full bg-sage-100 text-sage-800 border border-sage-200">
+              <i data-lucide="sparkles" class="w-3 h-3 text-autumn-600"></i>
+              Live Student Experience Demo
+            </span>
+          </div>
+          <p class="text-[11px] text-stone-500 hidden md:block">Sample lesson notes: full transcript, inline vocabulary, speech-to-text clean-up & audio</p>
+        </div>
+      </div>
+
+      <!-- Calming Atmosphere Controls -->
+      <div class="flex flex-wrap items-center gap-2">
+        
+        <!-- London Breeze Audio Player -->
+        <div class="flex items-center gap-1.5 bg-white/90 border border-[#dfd0b5] rounded-xl px-2.5 py-1 shadow-sm">
+          <button id="soundscape-btn" onclick="toggleSoundscape()" class="flex items-center gap-1.5 text-xs font-semibold text-sage-700 hover:text-sage-900 transition px-1.5 py-0.5 rounded-lg" title="Play soothing London autumn breeze soundscape">
+            <i data-lucide="wind" id="soundscape-icon" class="w-3.5 h-3.5 text-autumn-600"></i>
+            <span id="soundscape-label">London Breeze: Off</span>
+          </button>
+          <select id="soundscape-preset" onchange="changeSoundscapePreset(this.value)" class="text-[11px] bg-parchment-50 border border-parchment-200 rounded-lg px-1.5 py-0.5 text-stone-700 focus:outline-none">
+            <option value="breeze">🍂 Kensington Breeze</option>
+            <option value="rain">🌧️ Soft London Rain</option>
+            <option value="study">🕯️ Warm Study Hearth</option>
+          </select>
+          <input id="soundscape-volume" type="range" min="0.05" max="0.6" step="0.05" value="0.22" oninput="updateSoundscapeVolume(this.value)" class="w-14 accent-sage-600 cursor-pointer hidden sm:block" />
+        </div>
+
+        <!-- Falling Leaves Toggle -->
+        <button id="leaves-toggle-btn" onclick="cycleLeafBreeze()" class="px-2.5 py-1.5 rounded-xl bg-white/90 hover:bg-autumn-50 border border-[#dfd0b5] text-xs font-medium text-stone-700 flex items-center gap-1.5 shadow-sm transition">
+          <i data-lucide="leaf" class="w-3.5 h-3.5 text-autumn-600"></i>
+          <span id="leaves-label" class="hidden sm:inline">Leaves: Gentle</span>
+        </button>
+
+        <!-- UK Voice Speed -->
+        <div class="flex items-center gap-1 bg-white/90 border border-[#dfd0b5] rounded-xl px-2 py-1 shadow-sm text-xs">
+          <i data-lucide="volume-2" class="w-3.5 h-3.5 text-sage-600"></i>
+          <button onclick="setVoiceRate(0.85)" id="rate-slow" class="px-1.5 py-0.5 rounded-md text-[11px] text-stone-600 hover:bg-parchment-100 transition">0.85×</button>
+          <button onclick="setVoiceRate(1.0)" id="rate-normal" class="px-1.5 py-0.5 rounded-md text-[11px] bg-sage-600 text-white font-semibold transition">UK 1×</button>
+        </div>
+
+        <!-- Theme Mood Selector -->
+        <div class="hidden lg:flex items-center gap-1 bg-white/90 border border-[#dfd0b5] rounded-xl p-1 text-[11px] shadow-sm">
+          <button onclick="setThemeMood('kensington')" id="theme-kensington" class="px-2 py-0.5 rounded-lg bg-autumn-100 text-autumn-800 font-semibold transition">Bath Stone</button>
+          <button onclick="setThemeMood('winchester')" id="theme-winchester" class="px-2 py-0.5 rounded-lg text-stone-600 hover:text-stone-900 transition">Winchester Mist</button>
+          <button onclick="setThemeMood('twilight')" id="theme-twilight" class="px-2 py-0.5 rounded-lg text-stone-600 hover:text-stone-900 transition">Warm Study</button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 space-y-7 relative z-10">
+
+    <!-- HERO / PROSPECTIVE STUDENT VALUE PROPOSITION -->
+    <section class="sanctuary-card rounded-3xl p-6 sm:p-9 relative overflow-hidden">
+      <div class="absolute -right-12 -top-12 w-64 h-64 bg-autumn-200/30 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-12 -bottom-12 w-64 h-64 bg-sage-200/35 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-7 items-center">
+        <div class="lg:col-span-8 space-y-3.5">
+          <div class="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-full bg-sage-100/90 border border-sage-200 text-sage-800 text-xs font-medium">
+            <i data-lucide="compass" class="w-3.5 h-3.5 text-autumn-600"></i>
+            <span>Interactive Demo • "London's Hidden Corners & The Art of Understatement"</span>
+          </div>
+
+          <h1 class="font-serif text-3xl sm:text-4xl lg:text-[2.65rem] font-bold text-slatewarm-900 leading-[1.16]">
+            Never Worry About Taking Notes Again — <span class="text-autumn-700 italic font-semibold">Speak Freely</span> with Louie
+          </h1>
+
+          <p class="text-stone-600 text-sm sm:text-base leading-relaxed max-w-3xl">
+            In our lessons, your entire energy goes into thinking and speaking with confidence. Behind the scenes, an intelligent transcription program records our conversation, and I curate a <strong class="text-slatewarm-800">private, calm digital sanctuary</strong> for you after every class.
+          </p>
+
+          <!-- 4 Pillars for Prospective Students -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 text-xs">
+            <div class="flex items-start gap-2 bg-parchment-100/80 p-2.5 rounded-xl border border-parchment-300">
+              <i data-lucide="check-circle" class="w-4 h-4 text-sage-600 shrink-0 mt-0.5"></i>
+              <div>
+                <strong class="text-slatewarm-900">Zero Note-Taking Stress:</strong> Every word is recorded and tidied up so you can simply talk without a pen in hand.
+              </div>
+            </div>
+            <div class="flex items-start gap-2 bg-parchment-100/80 p-2.5 rounded-xl border border-parchment-300">
+              <i data-lucide="check-circle" class="w-4 h-4 text-sage-600 shrink-0 mt-0.5"></i>
+              <div>
+                <strong class="text-slatewarm-900">Inline Vocabulary & Pronunciation:</strong> Hover or click any highlighted word in the transcript to hear British audio and see clear definitions.
+              </div>
+            </div>
+            <div class="flex items-start gap-2 bg-parchment-100/80 p-2.5 rounded-xl border border-parchment-300">
+              <i data-lucide="check-circle" class="w-4 h-4 text-sage-600 shrink-0 mt-0.5"></i>
+              <div>
+                <strong class="text-slatewarm-900">Gentle, Encouraging Polishes:</strong> We celebrate the expressions you used well and offer supportive, non-judgmental upgrades.
+              </div>
+            </div>
+            <div class="flex items-start gap-2 bg-parchment-100/80 p-2.5 rounded-xl border border-parchment-300">
+              <i data-lucide="check-circle" class="w-4 h-4 text-sage-600 shrink-0 mt-0.5"></i>
+              <div>
+                <strong class="text-slatewarm-900">Speech-to-Text Errors Sorted Out:</strong> Automatic note-takers make funny mishearings—we sort them all out cleanly so your notes are spotless!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Experience Stats -->
+        <div class="lg:col-span-4 grid grid-cols-2 gap-3">
+          <div onclick="switchTab('transcript')" class="cursor-pointer p-4 rounded-2xl bg-parchment-50/95 border border-parchment-300 hover:border-autumn-400 transition shadow-sm group">
+            <div class="text-[11px] font-mono font-semibold uppercase text-autumn-700 flex items-center justify-between">
+              <span>Feature 1</span>
+              <i data-lucide="scroll-text" class="w-4 h-4 group-hover:scale-110 transition"></i>
+            </div>
+            <div class="font-serif font-bold text-slatewarm-900 text-lg mt-0.5">Tidy Transcript</div>
+            <p class="text-[11px] text-stone-600 mt-0.5">Exact timestamps & inline clickable vocabulary</p>
+          </div>
+
+          <div onclick="switchTab('vocab')" class="cursor-pointer p-4 rounded-2xl bg-sage-50/95 border border-sage-200 hover:border-sage-400 transition shadow-sm group">
+            <div class="text-[11px] font-mono font-semibold uppercase text-sage-700 flex items-center justify-between">
+              <span>Feature 2</span>
+              <i data-lucide="book-marked" class="w-4 h-4 group-hover:scale-110 transition"></i>
+            </div>
+            <div class="font-serif font-bold text-slatewarm-900 text-lg mt-0.5">Flagged Lexicon</div>
+            <p class="text-[11px] text-stone-600 mt-0.5">B2–C2 idioms, UK speech & definitions</p>
+          </div>
+
+          <div onclick="switchTab('fixes')" class="cursor-pointer p-4 rounded-2xl bg-autumn-50/95 border border-autumn-200 hover:border-autumn-400 transition shadow-sm group">
+            <div class="text-[11px] font-mono font-semibold uppercase text-autumn-700 flex items-center justify-between">
+              <span>Feature 3</span>
+              <i data-lucide="wand-sparkles" class="w-4 h-4 group-hover:scale-110 transition"></i>
+            </div>
+            <div class="font-serif font-bold text-slatewarm-900 text-lg mt-0.5">Strengths & Fixes</div>
+            <p class="text-[11px] text-stone-600 mt-0.5">Celebrating your speech + sorting note-taker errors</p>
+          </div>
+
+          <div onclick="switchTab('practice')" class="cursor-pointer p-4 rounded-2xl bg-parchment-50/95 border border-parchment-300 hover:border-sage-400 transition shadow-sm group">
+            <div class="text-[11px] font-mono font-semibold uppercase text-sage-700 flex items-center justify-between">
+              <span>Feature 4</span>
+              <i data-lucide="coffee" class="w-4 h-4 group-hover:scale-110 transition"></i>
+            </div>
+            <div class="font-serif font-bold text-slatewarm-900 text-lg mt-0.5">Peaceful Review</div>
+            <p class="text-[11px] text-stone-600 mt-0.5">Interactive flashcards & context matching quiz</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5-TAB NAVIGATION BAR -->
+    <nav class="sanctuary-card rounded-2xl p-2 flex flex-wrap items-center justify-between gap-2 no-print">
+      <div class="flex flex-wrap items-center gap-1.5 w-full sm:w-auto">
+        <button onclick="switchTab('transcript')" id="tab-btn-transcript" class="tab-btn flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 bg-sage-700 text-white shadow-sm">
+          <i data-lucide="message-square-quote" class="w-4 h-4"></i>
+          <span>1. Sample Conversation Transcript</span>
+          <span class="px-2 py-0.5 text-[10px] rounded-full bg-white/20 text-white font-mono">00:00–11:45</span>
+        </button>
+
+        <button onclick="switchTab('vocab')" id="tab-btn-vocab" class="tab-btn flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 text-stone-700 hover:bg-parchment-100">
+          <i data-lucide="book-marked" class="w-4 h-4 text-autumn-600"></i>
+          <span>2. Vocabulary Dictionary</span>
+          <span class="px-2 py-0.5 text-[10px] rounded-full bg-autumn-100 text-autumn-800 font-mono">16 Words</span>
+        </button>
+
+        <button onclick="switchTab('fixes')" id="tab-btn-fixes" class="tab-btn flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 text-stone-700 hover:bg-parchment-100">
+          <i data-lucide="sparkles" class="w-4 h-4 text-sage-600"></i>
+          <span>3. Note-Taker Fixes & Gentle Notes</span>
+        </button>
+
+        <button onclick="switchTab('places')" id="tab-btn-places" class="tab-btn flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 text-stone-700 hover:bg-parchment-100">
+          <i data-lucide="landmark" class="w-4 h-4 text-autumn-600"></i>
+          <span>4. Cultural Prompts & London</span>
+        </button>
+
+        <button onclick="switchTab('practice')" id="tab-btn-practice" class="tab-btn flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 text-stone-700 hover:bg-parchment-100">
+          <i data-lucide="coffee" class="w-4 h-4 text-sage-600"></i>
+          <span>5. Peaceful Practice Sanctuary</span>
+        </button>
+      </div>
+
+      <div class="hidden sm:block">
+        <a href="#book-call" class="px-3.5 py-2 rounded-xl bg-autumn-600 hover:bg-autumn-700 text-white font-semibold text-xs flex items-center gap-1.5 shadow-sm transition">
+          <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+          <span>Book a Lesson with Louie</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- =================================================================== -->
+    <!-- TAB 1: SAMPLE TRANSCRIPT WITH INLINE VOCAB & SPOTLIGHT              -->
+    <!-- =================================================================== -->
+    <section id="tab-panel-transcript" class="tab-panel space-y-6">
+      
+      <div class="sanctuary-card rounded-3xl p-5 sm:p-6 space-y-4">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#e6decb] pb-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-mono uppercase tracking-widest text-sage-700 font-semibold">Interactive Conversation Transcript</span>
+              <span class="px-2 py-0.5 text-[11px] rounded-full bg-autumn-100 text-autumn-800 font-medium">Sample Lesson Excerpt</span>
+            </div>
+            <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slatewarm-900 mt-0.5">
+              "Finding Your Natural Voice & Deciphering British Understatement"
+            </h2>
+            <p class="text-xs sm:text-sm text-stone-600 mt-1">
+              Move your mouse over any <span class="vocab-mark">highlighted word</span> below for an instant explanation, or click it to view complete details in the side panel. Notice how all the note-taker's automated spelling errors are flagged and corrected!
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <div class="relative">
+              <i data-lucide="search" class="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+              <input id="transcript-search" type="text" oninput="filterTranscript()" placeholder="Search transcript or time..." class="pl-9 pr-3 py-1.5 rounded-xl bg-white border border-[#dfd0b5] text-xs text-stone-800 focus:outline-none focus:border-sage-600 w-48" />
+            </div>
+
+            <select id="speaker-filter" onchange="filterTranscript()" class="px-3 py-1.5 rounded-xl bg-white border border-[#dfd0b5] text-xs font-medium text-stone-700">
+              <option value="all">Both Speakers</option>
+              <option value="Sofia">Sofia (Student) Only</option>
+              <option value="Louie">Louie (Tutor) Only</option>
+            </select>
+
+            <button onclick="toggleVocabHighlights()" id="btn-toggle-highlights" class="px-3 py-1.5 rounded-xl bg-autumn-100 text-autumn-800 border border-autumn-300 text-xs font-semibold flex items-center gap-1.5">
+              <i data-lucide="highlighter" class="w-3.5 h-3.5"></i>
+              <span>Vocab Highlights: On</span>
+            </button>
+
+            <button onclick="toggleAsrBadges()" id="btn-toggle-asr" class="px-3 py-1.5 rounded-xl bg-sage-100 text-sage-800 border border-sage-300 text-xs font-semibold flex items-center gap-1.5">
+              <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
+              <span>Note-Taker Fixes: Visible</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Chapters -->
+        <div class="flex flex-wrap items-center gap-1.5 pt-1">
+          <span class="text-[11px] font-mono uppercase tracking-wider text-stone-500 mr-1">Chapters:</span>
+          <button onclick="scrollToChapter('chap-1')" class="px-2.5 py-1 rounded-lg bg-parchment-100 hover:bg-autumn-100 text-stone-700 text-xs font-medium transition border border-parchment-200">
+            00:00 • I. Autumn Walks in Hampstead
+          </button>
+          <button onclick="scrollToChapter('chap-2')" class="px-2.5 py-1 rounded-lg bg-parchment-100 hover:bg-autumn-100 text-stone-700 text-xs font-medium transition border border-parchment-200">
+            03:40 • II. The Art of British Understatement
+          </button>
+          <button onclick="scrollToChapter('chap-3')" class="px-2.5 py-1 rounded-lg bg-parchment-100 hover:bg-autumn-100 text-stone-700 text-xs font-medium transition border border-parchment-200">
+            07:15 • III. Overcoming Fear of Mistakes
+          </button>
+          <button onclick="scrollToChapter('chap-4')" class="px-2.5 py-1 rounded-lg bg-parchment-100 hover:bg-autumn-100 text-stone-700 text-xs font-medium transition border border-parchment-200">
+            10:10 • IV. Wrapping Up & Your Custom Notes
+          </button>
+        </div>
+      </div>
+
+      <!-- Transcript Columns: Stream on Left, Sticky Spotlight on Right -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Conversation Turns -->
+        <div class="lg:col-span-8 space-y-4" id="transcript-stream-container">
+          <!-- Rendered dynamically by JS -->
+        </div>
+
+        <!-- Sticky Right-Hand Vocabulary Spotlight Inspector -->
+        <aside class="lg:col-span-4 lg:sticky lg:top-20 space-y-4">
+          <div class="sanctuary-card rounded-3xl p-5 sm:p-6 border-t-4 border-t-autumn-500 space-y-4" id="vocab-inspector-card">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] font-mono uppercase tracking-widest text-autumn-700 font-semibold flex items-center gap-1.5">
+                <i data-lucide="sparkle" class="w-3.5 h-3.5"></i>
+                Vocabulary Spotlight
+              </span>
+              <span id="insp-time" class="px-2.5 py-0.5 rounded-full bg-parchment-100 border border-parchment-300 font-mono text-xs text-stone-700">
+                🕒 01:15
+              </span>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between gap-2">
+                <h3 id="insp-word" class="font-serif text-2xl sm:text-3xl font-bold text-slatewarm-900">serendipity</h3>
+                <button id="insp-audio-btn" onclick="speakWord('serendipity')" class="p-2.5 rounded-xl bg-sage-100 hover:bg-sage-200 text-sage-800 transition shrink-0" title="Listen in British English">
+                  <i data-lucide="volume-2" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 mt-1">
+                <span id="insp-ipa" class="text-xs font-mono text-stone-500">/ˌser.ənˈdɪp.ə.ti/</span>
+                <span id="insp-pos" class="px-2 py-0.5 text-[11px] rounded-md bg-parchment-100 text-stone-700 font-medium">noun</span>
+                <span id="insp-level" class="px-2 py-0.5 text-[11px] rounded-md bg-autumn-100 text-autumn-800 font-mono font-semibold">C2 Literary</span>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-parchment-50 border border-parchment-200 space-y-1.5">
+              <div class="text-[11px] font-mono uppercase tracking-wider text-stone-500">Meaning & Nuance</div>
+              <p id="insp-def" class="text-xs sm:text-sm text-slatewarm-800 leading-relaxed">
+                The occurrence of finding valuable, pleasant, or beautiful things by chance in a happy, unexpected way.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-sage-50/80 border border-sage-200 space-y-1.5">
+              <div class="text-[11px] font-mono uppercase tracking-wider text-sage-700">How It Was Used in Our Lesson</div>
+              <p id="insp-quote" class="text-xs italic text-stone-700 leading-relaxed">
+                "It was pure serendipity—we turned a corner and found this quiet 18th-century garden."
+              </p>
+            </div>
+
+            <div class="flex items-center justify-between pt-1 text-xs border-t border-[#e6decb]">
+              <span class="text-stone-500">Translations & Cognates:</span>
+              <span id="insp-es" class="font-semibold text-sage-800">serendipia (ES) • sérendipité (FR)</span>
+            </div>
+          </div>
+
+          <!-- Prospective Student Call-Out -->
+          <div class="sanctuary-card rounded-3xl p-5 space-y-3">
+            <div class="flex items-center gap-2 text-sage-800 font-serif font-bold text-lg">
+              <i data-lucide="heart-handshake" class="w-5 h-5 text-autumn-600"></i>
+              <span>Why Students Love This</span>
+            </div>
+            <p class="text-xs text-stone-600 leading-relaxed">
+              Instead of struggling to jot down notes while trying to speak, your transcript and vocabulary are captured automatically.
+            </p>
+            <p class="text-xs text-stone-600 leading-relaxed">
+              You can listen to any turn with native British pronunciation, review on your smartphone during your morning commute, or practice with flashcards.
+            </p>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 2: VOCABULARY DICTIONARY                                        -->
+    <!-- =================================================================== -->
+    <section id="tab-panel-vocab" class="tab-panel hidden space-y-6">
+      <div class="sanctuary-card rounded-3xl p-6 sm:p-8 space-y-5">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#e6decb] pb-5">
+          <div>
+            <span class="text-xs font-mono uppercase tracking-widest text-autumn-700 font-semibold">Timestamped Lexicon • 16 Sample Items</span>
+            <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slatewarm-900 mt-1">
+              Curated Vocabulary, Idioms & British Expressions
+            </h2>
+            <p class="text-xs sm:text-sm text-stone-600 mt-1">
+              Click <strong>"Jump to Transcript"</strong> on any card to see exactly where and how it was used in our conversation!
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <input id="vocab-search" type="text" oninput="renderVocabGrid()" placeholder="Search word, meaning, time..." class="px-3 py-2 rounded-xl bg-white border border-[#dfd0b5] text-xs text-stone-800 w-52" />
+            <select id="vocab-level-filter" onchange="renderVocabGrid()" class="px-3 py-2 rounded-xl bg-white border border-[#dfd0b5] text-xs font-medium text-stone-700">
+              <option value="all">All Levels (B2–C2)</option>
+              <option value="C2">C2 Mastery</option>
+              <option value="C1">C1 Advanced</option>
+              <option value="B2">B2 Upper-Intermediate</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="vocab-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 3: NOTE-TAKER FIXES & GENTLE PHRASING NOTES                     -->
+    <!-- =================================================================== -->
+    <section id="tab-panel-fixes" class="tab-panel hidden space-y-6">
+      <div class="sanctuary-card rounded-3xl p-6 sm:p-8 space-y-6">
+        <div class="border-b border-[#e6decb] pb-4">
+          <span class="text-xs font-mono uppercase tracking-widest text-sage-700 font-semibold">Supportive Language Feedback</span>
+          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slatewarm-900 mt-1">
+            Strengths First: Celebrating What You Said Brilliantly
+          </h2>
+          <p class="text-xs sm:text-sm text-stone-600 mt-1">
+            We never judge or red-pen your English. Here are four natural expressions the student used with great instinct, followed by four gentle, high-impact phrasing polishes.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-sage-50/90 border border-sage-200 space-y-3">
+          <div class="flex items-center gap-2 text-sage-800 font-serif font-bold text-xl">
+            <i data-lucide="award" class="w-5 h-5 text-autumn-600"></i>
+            <span>Natural Instincts Observed in Today's Lesson</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            <div class="p-3 rounded-xl bg-white/90 border border-sage-200">
+              <span class="font-mono text-[11px] text-sage-700">01:15</span>
+              <div class="font-bold text-slatewarm-900 mt-0.5">"to take it all in"</div>
+              <p class="text-stone-600 mt-0.5">Natural idiom for pausing to absorb a beautiful atmosphere.</p>
+            </div>
+            <div class="p-3 rounded-xl bg-white/90 border border-sage-200">
+              <span class="font-mono text-[11px] text-sage-700">04:10</span>
+              <div class="font-bold text-slatewarm-900 mt-0.5">"under the impression"</div>
+              <p class="text-stone-600 mt-0.5">Polite, advanced way of describing an earlier assumption.</p>
+            </div>
+            <div class="p-3 rounded-xl bg-white/90 border border-sage-200">
+              <span class="font-mono text-[11px] text-sage-700">07:20</span>
+              <div class="font-bold text-slatewarm-900 mt-0.5">"it slipped my mind"</div>
+              <p class="text-stone-600 mt-0.5">Idiomatic native alternative to saying "I forgot".</p>
+            </div>
+            <div class="p-3 rounded-xl bg-white/90 border border-sage-200">
+              <span class="font-mono text-[11px] text-sage-700">09:15</span>
+              <div class="font-bold text-slatewarm-900 mt-0.5">"second nature"</div>
+              <p class="text-stone-600 mt-0.5">Spot-on phrase for habits that become automatic through practice.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="gentle-polishes-grid"></div>
+      </div>
+
+      <!-- Note-Taker Fixes -->
+      <div class="sanctuary-card rounded-3xl p-6 sm:p-8 space-y-5">
+        <div class="border-b border-[#e6decb] pb-4">
+          <span class="text-xs font-mono uppercase tracking-widest text-autumn-700 font-semibold">Transcript Clean-Up Log</span>
+          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slatewarm-900 mt-1">
+            How Louie Cleans Up Speech-to-Text Mistakes
+          </h2>
+          <p class="text-xs sm:text-sm text-stone-600 mt-1">
+            Speech-to-text programs often produce hilarious mishearings with British place names and idioms. We fix them completely so your notes read like a book!
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="asr-fixes-grid"></div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 4: CULTURAL PLACES & PROMPTS                                    -->
+    <!-- =================================================================== -->
+    <section id="tab-panel-places" class="tab-panel hidden space-y-6">
+      <div class="sanctuary-card rounded-3xl p-6 sm:p-8 space-y-6">
+        <div class="border-b border-[#e6decb] pb-4">
+          <span class="text-xs font-mono uppercase tracking-widest text-autumn-700 font-semibold">Cultural Deep-Dives</span>
+          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slatewarm-900 mt-1">
+            Topics & Visual Prompts Explored in the Lesson
+          </h2>
+          <p class="text-xs sm:text-sm text-stone-600 mt-1">
+            Every lesson blends language learning with culture, art, psychology, and travel. Here is a taste of the topics we discussed today.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="sanctuary-subcard rounded-2xl p-6 space-y-3 border-l-4 border-l-autumn-500">
+            <span class="text-xs font-mono text-autumn-700 font-semibold">00:00 – 03:20 • London Walk</span>
+            <h3 class="font-serif text-2xl font-bold text-slatewarm-900">1. Hampstead Heath & Kenwood House</h3>
+            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+              A wild, ancient park in north London with rolling meadows, ancient oaks, and a view overlooking the entire capital. Kenwood House sits at the crest of the hill, offering an 18th-century haven away from urban bustle.
+            </p>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              <span class="px-2 py-0.5 text-[11px] rounded-md bg-sage-100 text-sage-800">serendipity</span>
+              <span class="px-2 py-0.5 text-[11px] rounded-md bg-sage-100 text-sage-800">quaint</span>
+              <span class="px-2 py-0.5 text-[11px] rounded-md bg-sage-100 text-sage-800">unwind</span>
+            </div>
+          </div>
+
+          <div class="sanctuary-subcard rounded-2xl p-6 space-y-3 border-l-4 border-l-sage-600">
+            <span class="text-xs font-mono text-sage-700 font-semibold">03:40 – 06:50 • British Culture</span>
+            <h3 class="font-serif text-2xl font-bold text-slatewarm-900">2. The Nuances of British Understatement</h3>
+            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+              Why do British people say <em>"not bad"</em> when they mean <em>"superb"</em>? In British social etiquette, understated phrasing prevents arrogance and maintains a calm, humble social atmosphere.
+            </p>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              <span class="px-2 py-0.5 text-[11px] rounded-md bg-autumn-100 text-autumn-800">understatement</span>
+              <span class="px-2 py-0.5 text-[11px] rounded-md bg-autumn-100 text-autumn-800">nuance</span>
+              <span class="px-2 py-0.5 text-[11px] rounded-md bg-autumn-100 text-autumn-800">stiff upper lip</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 5: PEACEFUL PRACTICE & CALL TO ACTION                           -->
+    <!-- =================================================================== -->
+    <section id="tab-panel-practice" class="tab-panel hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left: Interactive Flashcards -->
+        <div class="lg:col-span-6 sanctuary-card rounded-3xl p-6 sm:p-8 space-y-5 flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono uppercase tracking-widest text-sage-700 font-semibold">Active Recall</span>
+              <span id="fc-counter" class="text-xs font-mono text-stone-500">Card 1 of 8</span>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-slatewarm-900">Interactive Vocabulary Cards</h3>
+            <p class="text-xs text-stone-600">Click the card to reveal the definition, quote from the lesson, and pronunciation.</p>
+          </div>
+
+          <div onclick="flipFlashcard()" class="cursor-pointer sanctuary-subcard rounded-2xl p-7 min-h-[240px] flex flex-col items-center justify-center text-center space-y-3 border-2 border-[#dfd0b5] hover:border-autumn-400 transition select-none">
+            <span id="fc-badge" class="px-2.5 py-0.5 rounded-full bg-autumn-100 text-autumn-800 text-[11px] font-mono">01:15 • C2 Literary</span>
+            <h4 id="fc-front-title" class="font-serif text-3xl font-bold text-slatewarm-900">serendipity</h4>
+            <p id="fc-sub" class="text-xs sm:text-sm text-stone-600 max-w-md leading-relaxed">
+              Click anywhere on this card to reveal the meaning and lesson context
+            </p>
+            <div id="fc-back-details" class="hidden space-y-2 pt-2 border-t border-parchment-200 w-full">
+              <p id="fc-quote" class="text-xs italic text-sage-800"></p>
+              <p id="fc-es" class="text-xs font-semibold text-autumn-700"></p>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between gap-2 pt-2">
+            <button onclick="prevFlashcard()" class="px-4 py-2 rounded-xl bg-parchment-100 hover:bg-parchment-200 text-xs font-semibold text-stone-700 flex items-center gap-1.5 transition">
+              <i data-lucide="arrow-left" class="w-4 h-4"></i> Previous
+            </button>
+            <button onclick="speakCurrentFlashcard()" class="px-4 py-2 rounded-xl bg-sage-100 hover:bg-sage-200 text-xs font-semibold text-sage-800 flex items-center gap-1.5 transition">
+              <i data-lucide="volume-2" class="w-4 h-4"></i> Listen (UK)
+            </button>
+            <button onclick="nextFlashcard()" class="px-4 py-2 rounded-xl bg-sage-700 hover:bg-sage-800 text-xs font-semibold text-white flex items-center gap-1.5 transition">
+              Next <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Context Quiz -->
+        <div class="lg:col-span-6 sanctuary-card rounded-3xl p-6 sm:p-8 space-y-5">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-xs font-mono uppercase tracking-widest text-autumn-700 font-semibold">No-Pressure Practice</span>
+              <h3 class="font-serif text-2xl font-bold text-slatewarm-900 mt-0.5">Match the Word to Conversation</h3>
+            </div>
+            <span id="quiz-score-badge" class="px-3 py-1 rounded-full bg-sage-100 text-sage-800 text-xs font-mono font-semibold">0 / 4 Completed</span>
+          </div>
+
+          <div id="quiz-container" class="space-y-4 max-h-[420px] overflow-y-auto pr-1"></div>
+        </div>
+
+      </div>
+
+      <!-- BOOKING / CONTACT CALL-TO-ACTION FOR PROSPECTIVE STUDENTS -->
+      <div id="book-call" class="sanctuary-card rounded-3xl p-6 sm:p-9 text-center space-y-4 border-2 border-autumn-300 bg-gradient-to-b from-[#fffdf9] to-[#faf4eb]">
+        <span class="px-3 py-1 rounded-full bg-autumn-100 text-autumn-800 text-xs font-mono uppercase tracking-wider font-semibold">
+          Ready to experience stress-free English learning?
+        </span>
+        <h3 class="font-serif text-3xl sm:text-4xl font-bold text-slatewarm-900 max-w-2xl mx-auto">
+          Start Having Natural Conversations with Louie
+        </h3>
+        <p class="text-stone-600 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+          Book your first trial lesson today. We will talk about topics you genuinely care about, build your fluency step-by-step, and you'll receive your own personal sanctuary page right after class!
+        </p>
+        <div class="pt-2 flex flex-wrap items-center justify-center gap-3">
+          <a href="https://preply.com" target="_blank" class="px-6 py-3 rounded-2xl bg-autumn-600 hover:bg-autumn-700 text-white font-semibold text-sm shadow-md shadow-autumn-600/20 transition flex items-center gap-2">
+            <i data-lucide="calendar" class="w-4 h-4"></i>
+            <span>Book a Trial on Preply</span>
+          </a>
+          <button onclick="switchTab('transcript')" class="px-5 py-3 rounded-2xl bg-white hover:bg-parchment-100 border border-[#dfd0b5] text-stone-700 font-semibold text-sm transition">
+            Explore More of the Transcript
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-xs text-stone-500 border-t border-[#e6decb]/80 mt-8 no-print">
+    <p class="font-serif italic text-base text-slatewarm-800 mb-1">"Speak freely, reflect quietly, and let the language become second nature."</p>
+    <p>Sample interactive companion prepared by Louie for prospective students • London & Winchester Autumn Breeze</p>
+  </footer>
+
+  <script>
+    // -------------------------------------------------------------------------
+    // 1. DEMO VOCABULARY DATABASE (16 Sample Flagged Words & Idioms)
+    // -------------------------------------------------------------------------
+    const DEMO_VOCAB_DB = {
+      "serendipity": {
+        word: "serendipity",
+        ipa: "/ˌser.ənˈdɪp.ə.ti/",
+        pos: "noun",
+        level: "C2",
+        time: "01:15",
+        turnId: "dturn-2",
+        cat: "culture",
+        def: "Finding valuable, pleasant, or fortunate things entirely by happy chance.",
+        quote: "Louie (01:15): \"It was pure serendipity—we turned a corner and found this quiet 18th-century garden.\"",
+        es: "serendipia / casualidad afortunada"
+      },
+      "quaint": {
+        word: "quaint",
+        ipa: "/kweɪnt/",
+        pos: "adjective",
+        level: "B2",
+        time: "01:15",
+        turnId: "dturn-2",
+        cat: "travel",
+        def: "Attractively unusual, old-fashioned, or charming in a traditional way.",
+        quote: "Louie (01:15): \"...tucked away behind these quaint red-brick mews houses.\"",
+        es: "pintoresco / de época / con encanto"
+      },
+      "unwind": {
+        word: "unwind",
+        ipa: "/ʌnˈwaɪnd/",
+        pos: "verb",
+        level: "B2",
+        time: "02:40",
+        turnId: "dturn-3",
+        cat: "everyday",
+        def: "To relax, destress, and let go of tension after a busy or noisy day.",
+        quote: "Sofia (02:40): \"I feel like I need a quiet place like that to unwind after long work days.\"",
+        es: "desconectar / relajarse"
+      },
+      "understatement": {
+        word: "understatement",
+        ipa: "/ˈʌn.dəˌsteɪt.mənt/",
+        pos: "noun",
+        level: "C1",
+        time: "03:40",
+        turnId: "dturn-4",
+        cat: "culture",
+        def: "Describing something in a way that makes it seem less important, serious, or intense than it really is.",
+        quote: "Louie (03:40): \"The British have a real affection for understatement—it keeps conversation calm and humble.\"",
+        es: "eufemismo / atenuación / moderación"
+      },
+      "not-bad": {
+        word: "not bad (British meaning)",
+        ipa: "/nɒt bæd/",
+        pos: "idiom / understatement",
+        level: "B2",
+        time: "04:10",
+        turnId: "dturn-5",
+        cat: "idioms",
+        def: "In casual British English, 'not bad' often means 'truly fantastic' or 'very impressive'.",
+        quote: "Sofia (04:10): \"So when a colleague said my presentation was 'not bad', they actually liked it?\"",
+        es: "nada mal (en UK: ¡fantástico!)"
+      },
+      "nuance": {
+        word: "nuance",
+        ipa: "/ˈnjuː.ɑːns/",
+        pos: "noun",
+        level: "C1",
+        time: "05:00",
+        turnId: "dturn-6",
+        cat: "culture",
+        def: "A very subtle difference in meaning, expression, sound, or tone.",
+        quote: "Louie (05:00): \"Exactly! Tone of voice and cultural nuance carry half the message in English.\"",
+        es: "matiz / sutileza"
+      },
+      "stiff-upper-lip": {
+        word: "stiff upper lip",
+        ipa: "/ˌstɪf ʌp.ə ˈlɪp/",
+        pos: "idiom",
+        level: "C2",
+        time: "05:00",
+        turnId: "dturn-6",
+        cat: "culture",
+        def: "The traditional British quality of remaining calm and hiding emotion during difficulty.",
+        quote: "Louie (05:00): \"It comes from that old 'stiff upper lip' tradition of never causing a fuss.\"",
+        es: "mantener la compostura / aguantar el tipo"
+      },
+      "hesitant": {
+        word: "hesitant",
+        ipa: "/ˈhez.ɪ.tənt/",
+        pos: "adjective",
+        level: "B2",
+        time: "07:15",
+        turnId: "dturn-7",
+        cat: "learning",
+        def: "Unsure, slow in speaking, or pausing because of self-doubt or fear of mistakes.",
+        quote: "Sofia (07:15): \"I often feel hesitant in group meetings because I am searching for the perfect grammar.\"",
+        es: "vacilante / dubitativo"
+      },
+      "put-at-ease": {
+        word: "put someone at ease",
+        ipa: "/pʊt æt iːz/",
+        pos: "idiom",
+        level: "C1",
+        time: "08:10",
+        turnId: "dturn-8",
+        cat: "idioms",
+        def: "To make someone feel relaxed, safe, and comfortable rather than nervous.",
+        quote: "Louie (08:10): \"A good conversation partner always puts you at ease so you forget you're practicing.\"",
+        es: "tranquilizar / hacer sentir cómodo a alguien"
+      },
+      "second-nature": {
+        word: "second nature",
+        ipa: "/ˌsek.ənd ˈneɪ.tʃər/",
+        pos: "idiom",
+        level: "C1",
+        time: "08:10",
+        turnId: "dturn-8",
+        cat: "learning",
+        def: "Something you do so naturally and easily that you don't even have to think about it.",
+        quote: "Louie (08:10): \"Once you stop overthinking, fluency becomes second nature through gentle exposure.\"",
+        es: "segunda naturaleza / algo natural y automático"
+      },
+      "make-the-most-of": {
+        word: "make the most of",
+        ipa: "/meɪk ðə məʊst əv/",
+        pos: "idiom",
+        level: "B2",
+        time: "09:30",
+        turnId: "dturn-9",
+        cat: "idioms",
+        def: "To use or enjoy something as much as possible; to take full advantage of an opportunity.",
+        quote: "Sofia (09:30): \"I really want to make the most of my lessons and stop holding myself back.\"",
+        es: "aprovechar al máximo / sacar el mayor partido"
+      },
+      "food-for-thought": {
+        word: "food for thought",
+        ipa: "/fuːd fɔː θɔːt/",
+        pos: "idiom",
+        level: "C1",
+        time: "10:10",
+        turnId: "dturn-10",
+        cat: "idioms",
+        def: "Something interesting that makes you think seriously or see things from a fresh angle.",
+        quote: "Sofia (10:10): \"That gives me so much food for thought about how I look at mistakes.\"",
+        es: "motivo de reflexión / tema para pensar"
+      }
+    };
+
+    function v(key, displayWord) {
+      const item = DEMO_VOCAB_DB[key];
+      const label = displayWord || (item ? item.word : key);
+      return `<span class="vocab-mark" data-vkey="${key}" onclick="inspectVocab('${key}')">${label}</span>`;
+    }
+
+    function fixBadge(corrected, rawMistake) {
+      return `<span class="asr-fix-pill" title="Note-taker misheard '${corrected}' as '${rawMistake}'">✨ Fixed: "${corrected}" <span class="text-stone-400">(note-taker wrote: "${rawMistake}")</span></span>`;
+    }
+
+    // -------------------------------------------------------------------------
+    // 2. DEMO CONVERSATION TURNS
+    // -------------------------------------------------------------------------
+    const DEMO_TRANSCRIPT_TURNS = [
+      {
+        id: "dturn-1",
+        chapterId: "chap-1",
+        chapterTitle: "Chapter I • Autumn Walks in Hampstead & Secret Sanctuaries (00:00 – 03:20)",
+        speaker: "Sofia",
+        time: "00:00",
+        html: `Hi Louie! I had a very busy week, but on Sunday I took a long walk around <strong>Hampstead Heath</strong> ${fixBadge("Hampstead Heath", "ham stead heat")}. It was my first time visiting north London.`
+      },
+      {
+        id: "dturn-2",
+        speaker: "Louie",
+        time: "01:15",
+        html: `Hampstead is wonderful, especially this time of year with the autumn leaves! Did you visit <strong>Kenwood House</strong>? ${fixBadge("Kenwood House", "can wood house")} The first time I discovered it was pure ${v("serendipity", "serendipity")}—my friend and I turned a corner and found this quiet 18th-century garden tucked behind these ${v("quaint", "quaint")} little mews houses.`
+      },
+      {
+        id: "dturn-3",
+        speaker: "Sofia",
+        time: "02:40",
+        html: `Yes! Exactly there. London can feel so overwhelming during the week, so finding a sanctuary like that helps me ${v("unwind", "unwind")}. But when I tried to order tea at the café nearby, I felt a bit clumsy with my phrasing.`
+      },
+      {
+        id: "dturn-4",
+        chapterId: "chap-2",
+        chapterTitle: "Chapter II • The Art of British Understatement & Teatime Nuance (03:40 – 06:50)",
+        speaker: "Louie",
+        time: "03:40",
+        html: `Don't worry about that at all! Ordering tea in England is full of curious little customs. For one thing, the British have a deep affection for ${v("understatement", "understatement")}—they avoid sounding too dramatic or boastful, which keeps conversations calm.`
+      },
+      {
+        id: "dturn-5",
+        speaker: "Sofia",
+        time: "04:10",
+        html: `That explains so much! Yesterday a colleague told me my presentation was <em>"${v("not-bad", "not bad")}"</em>, and I was under the impression they were disappointed. But another friend said that actually means they were very impressed!`
+      },
+      {
+        id: "dturn-6",
+        speaker: "Louie",
+        time: "05:00",
+        html: `Spot on! If a British person says, "Well, that wasn't too bad at all," they usually mean it was brilliant! It comes from that cultural ${v("nuance", "nuance")} and the old ${v("stiff-upper-lip", "stiff upper lip")} habit ${fixBadge("stiff upper lip", "stifled upper leaf")} of not getting over-excited. When you learn to decode that, you feel so much more connected to people.`
+      },
+      {
+        id: "dturn-7",
+        chapterId: "chap-3",
+        chapterTitle: "Chapter III • Overcoming Hesitation & Finding Confidence (07:15 – 09:50)",
+        speaker: "Sofia",
+        time: "07:15",
+        html: `I always get ${v("hesitant", "hesitant")} before speaking because in my head I am checking grammar rules: verb tenses, prepositions... It slipped my mind that conversation is really about human warmth.`
+      },
+      {
+        id: "dturn-8",
+        speaker: "Louie",
+        time: "08:10",
+        html: `You hit the nail on the head. In our lessons, you never have to worry about making mistakes. A great conversation partner ${v("put-at-ease", "puts you at ease")}. When you speak without that internal critic, the grammar becomes ${v("second-nature", "second nature")} through natural repetition.`
+      },
+      {
+        id: "dturn-9",
+        speaker: "Sofia",
+        time: "09:30",
+        html: `I really want to ${v("make-the-most-of", "make the most of")} this year in London and stop hesitating every time I open my mouth.`
+      },
+      {
+        id: "dturn-10",
+        chapterId: "chap-4",
+        chapterTitle: "Chapter IV • Wrapping Up & How Your Lesson Notes Work (10:10 – 11:45)",
+        speaker: "Louie",
+        time: "10:10",
+        html: `And you will! That's why I create these interactive sanctuary notes for you after every class. You never have to scribble notes while we chat. My program captures our conversation, I clean up any speech-to-text mistakes, flag all the B2–C2 vocabulary, and send you this private link with audio pronunciations so you can review peacefully over a cup of tea.`
+      },
+      {
+        id: "dturn-11",
+        speaker: "Sofia",
+        time: "11:20",
+        html: `That gives me so much ${v("food-for-thought", "food for thought")}, Louie. Thank you! It makes learning feel so relaxing.`
+      },
+      {
+        id: "dturn-12",
+        speaker: "Louie",
+        time: "11:45",
+        html: `You are very welcome, Sofia! Enjoy the rest of your week, and I'll see you in our next conversation.`
+      }
+    ];
+
+    // -------------------------------------------------------------------------
+    // 3. GENTLE PHRASING POLISHES & NOTE-TAKER FIX LOG
+    // -------------------------------------------------------------------------
+    const DEMO_POLISHES = [
+      {
+        time: "02:40",
+        topic: "Preposition with 'Unwind'",
+        said: "To unwind after long work days.",
+        natural: "To unwind after a long day at work.",
+        why: "In natural English idiom, we usually say 'after a long day at work' rather than plural 'work days'."
+      },
+      {
+        time: "04:10",
+        topic: "Past Tense Assumption",
+        said: "I was under the impression they are disappointed.",
+        natural: "I was under the impression they were disappointed.",
+        why: "Matching past tense ('was under the impression') with 'were disappointed' creates smooth, elegant harmony."
+      },
+      {
+        time: "07:15",
+        topic: "Adjective Preposition Pattern",
+        said: "I feel hesitant for speaking in meetings.",
+        natural: "I feel hesitant about speaking in meetings.",
+        why: "The natural collocation is 'hesitant about doing something' or 'hesitant to speak'."
+      },
+      {
+        time: "09:30",
+        topic: "Phrasal Verb Upgrade",
+        said: "I want to stop holding me back.",
+        natural: "I want to stop holding myself back.",
+        why: "Reflexive pronoun 'myself' is used when the subject and object are the same person."
+      }
+    ];
+
+    const DEMO_ASR_FIXES = [
+      {
+        time: "00:00",
+        speaker: "Sofia",
+        wrong: "ham stead heat",
+        right: "Hampstead Heath",
+        note: "Famous North London park and ancient woodland."
+      },
+      {
+        time: "01:15",
+        speaker: "Louie",
+        wrong: "can wood house",
+        right: "Kenwood House",
+        note: "Historic neo-classical villa overlooking the park."
+      },
+      {
+        time: "05:00",
+        speaker: "Louie",
+        wrong: "stifled upper leaf",
+        right: "stiff upper lip",
+        note: "Traditional British idiom for emotional stoicism."
+      }
+    ];
+
+    // -------------------------------------------------------------------------
+    // 4. FLASHCARD & QUIZ LOGIC
+    // -------------------------------------------------------------------------
+    const DEMO_FLASHCARD_KEYS = ["serendipity", "understatement", "second-nature", "nuance", "stiff-upper-lip", "unwind", "hesitant", "food-for-thought"];
+    let currentCardIndex = 0;
+    let isCardFlipped = false;
+
+    const DEMO_QUIZ = [
+      {
+        q: "1. When you turn a quiet corner in London and stumble upon a secret garden by pure chance, that is ________.",
+        options: ["serendipity", "understatement", "a shortcoming"],
+        correct: 0,
+        explain: "'Serendipity' (01:15) means finding lovely or fortunate things by happy accident."
+      },
+      {
+        q: "2. If a British colleague remarks that your new report was 'not bad at all', they most likely mean it was ________.",
+        options: ["mediocre", "impressive & brilliant", "full of errors"],
+        correct: 1,
+        explain: "In British understatement (04:10), 'not bad' is high praise!"
+      },
+      {
+        q: "3. After enough practice in a friendly, low-stress environment, natural speaking becomes ________.",
+        options: ["hesitant", "second nature", "unannounced"],
+        correct: 1,
+        explain: "'Second nature' (08:10) refers to a skill that becomes effortless and automatic."
+      },
+      {
+        q: "4. Taking a quiet Sunday stroll through Kenwood House allowed Sofia to ________ after a hectic work week.",
+        options: ["unwind", "dwarf", "overestimate"],
+        correct: 0,
+        explain: "To 'unwind' (02:40) means to relax and release tension."
+      }
+    ];
+    let quizAnswered = new Set();
+
+    // -------------------------------------------------------------------------
+    // 5. RENDER FUNCTIONS
+    // -------------------------------------------------------------------------
+    function renderTranscript() {
+      const container = document.getElementById('transcript-stream-container');
+      const searchVal = (document.getElementById('transcript-search')?.value || '').toLowerCase().trim();
+      const speakerFilter = document.getElementById('speaker-filter')?.value || 'all';
+
+      let html = '';
+      DEMO_TRANSCRIPT_TURNS.forEach(turn => {
+        if (turn.chapterTitle && speakerFilter === 'all' && !searchVal) {
+          html += `
+            <div id="${turn.chapterId}" class="pt-3 pb-1">
+              <div class="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-sage-100/90 via-parchment-100 to-autumn-50 border border-sage-200 flex items-center gap-2 text-xs sm:text-sm font-serif font-bold text-sage-800 shadow-sm">
+                <i data-lucide="bookmark" class="w-4 h-4 text-autumn-600 shrink-0"></i>
+                <span>${turn.chapterTitle}</span>
+              </div>
+            </div>
+          `;
+        }
+
+        if (speakerFilter !== 'all' && turn.speaker !== speakerFilter) return;
+        const plainText = turn.html.replace(/<[^>]+>/g, '').toLowerCase();
+        if (searchVal && !plainText.includes(searchVal) && !turn.time.includes(searchVal)) return;
+
+        const isSofia = turn.speaker === 'Sofia';
+        const cardStyle = isSofia
+          ? 'bg-[#fffdf9] border-l-4 border-l-autumn-500 border border-[#e6decb]'
+          : 'bg-[#f8faf8] border-l-4 border-l-sage-600 border border-[#d8e4dc]';
+        const badgeStyle = isSofia
+          ? 'bg-autumn-100 text-autumn-800 border-autumn-200'
+          : 'bg-sage-100 text-sage-800 border-sage-200';
+
+        html += `
+          <article id="${turn.id}" class="rounded-2xl p-4 sm:p-5 ${cardStyle} shadow-sm transition-all duration-300 space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold border ${badgeStyle}">
+                  ${isSofia ? '🌸 Sofia (Student)' : '🍂 Louie (Tutor)'}
+                </span>
+                <span class="font-mono text-xs text-stone-500 flex items-center gap-1">
+                  <i data-lucide="clock" class="w-3 h-3"></i>
+                  ${turn.time}
+                </span>
+              </div>
+              <button onclick="speakPlainTurn('${turn.id}')" class="text-stone-400 hover:text-sage-700 transition p-1 rounded-lg" title="Listen in British English">
+                <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+            <div class="text-sm sm:text-[15px] text-slatewarm-800 leading-relaxed font-sans">
+              ${turn.html}
+            </div>
+          </article>
+        `;
+      });
+
+      container.innerHTML = html;
+      lucide.createIcons();
+      initVocabTooltips();
+    }
+
+    function initVocabTooltips() {
+      document.querySelectorAll('.vocab-mark').forEach(el => {
+        const key = el.getAttribute('data-vkey');
+        const item = DEMO_VOCAB_DB[key];
+        if (!item) return;
+
+        if (el._tippy) el._tippy.destroy();
+
+        tippy(el, {
+          theme: 'autumn-sanctuary',
+          allowHTML: true,
+          interactive: true,
+          animation: 'shift-away',
+          maxWidth: 320,
+          content: `
+            <div class="p-2.5 space-y-2 text-left">
+              <div class="flex items-center justify-between gap-2 border-b border-parchment-200 pb-1.5">
+                <div>
+                  <span class="font-serif font-bold text-base text-slatewarm-900">${item.word}</span>
+                  <span class="block font-mono text-[10px] text-stone-500">${item.ipa} • ${item.pos}</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <span class="px-1.5 py-0.5 rounded bg-autumn-100 text-autumn-800 font-mono text-[10px] font-bold">${item.level}</span>
+                  <span class="px-1.5 py-0.5 rounded bg-sage-100 text-sage-800 font-mono text-[10px]">🕒 ${item.time}</span>
+                </div>
+              </div>
+              <p class="text-xs text-stone-700 leading-snug">${item.def}</p>
+              <div class="flex items-center justify-between pt-1 text-[11px] border-t border-parchment-200">
+                <span class="text-sage-800 font-semibold">${item.es}</span>
+                <button onclick="speakWord('${item.word.replace(/'/g, "\\'")}')" class="px-2 py-0.5 rounded bg-sage-700 text-white text-[10px] font-semibold">🔊 Listen UK</button>
+              </div>
+            </div>
+          `
+        });
+      });
+    }
+
+    function inspectVocab(key) {
+      const item = DEMO_VOCAB_DB[key];
+      if (!item) return;
+
+      document.querySelectorAll('.vocab-mark').forEach(el => {
+        el.classList.toggle('active-vocab', el.getAttribute('data-vkey') === key);
+      });
+
+      document.getElementById('insp-time').textContent = `🕒 ${item.time}`;
+      document.getElementById('insp-word').textContent = item.word;
+      document.getElementById('insp-ipa').textContent = item.ipa;
+      document.getElementById('insp-pos').textContent = item.pos;
+      document.getElementById('insp-level').textContent = item.level;
+      document.getElementById('insp-def').textContent = item.def;
+      document.getElementById('insp-quote').textContent = item.quote;
+      document.getElementById('insp-es').textContent = item.es;
+      document.getElementById('insp-audio-btn').setAttribute('onclick', `speakWord('${item.word.replace(/\s*\(.*?\)/g, '').replace(/'/g, "\\'")}')`);
+    }
+
+    function renderVocabGrid() {
+      const grid = document.getElementById('vocab-cards-grid');
+      const search = (document.getElementById('vocab-search')?.value || '').toLowerCase().trim();
+      const levelFilter = document.getElementById('vocab-level-filter')?.value || 'all';
+
+      const entries = Object.entries(DEMO_VOCAB_DB).filter(([key, item]) => {
+        if (levelFilter !== 'all' && item.level !== levelFilter) return false;
+        if (search) {
+          const hay = `${item.word} ${item.def} ${item.es} ${item.time}`.toLowerCase();
+          if (!hay.includes(search)) return false;
+        }
+        return true;
+      });
+
+      grid.innerHTML = entries.map(([key, item]) => `
+        <div class="sanctuary-subcard rounded-2xl p-5 flex flex-col justify-between space-y-3 hover:border-autumn-400">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-1.5">
+                <span class="px-2 py-0.5 rounded-md bg-autumn-100 text-autumn-800 font-mono text-[11px] font-bold">${item.level}</span>
+                <span class="px-2 py-0.5 rounded-md bg-parchment-100 text-stone-600 text-[11px]">${item.pos}</span>
+              </div>
+              <button onclick="jumpToTranscriptTurn('${item.turnId}', '${key}')" class="px-2.5 py-0.5 rounded-full bg-sage-100 hover:bg-sage-200 text-sage-800 font-mono text-[11px] font-semibold flex items-center gap-1 transition">
+                <i data-lucide="clock" class="w-3 h-3"></i>
+                ${item.time} ↗
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between gap-2 pt-1">
+              <div>
+                <h3 class="font-serif text-xl font-bold text-slatewarm-900">${item.word}</h3>
+                <span class="text-xs font-mono text-stone-500">${item.ipa}</span>
+              </div>
+              <button onclick="speakWord('${item.word.replace(/\s*\(.*?\)/g, '').replace(/'/g, "\\'")}')" class="p-2 rounded-xl bg-parchment-100 hover:bg-sage-100 text-sage-800 transition">
+                <i data-lucide="volume-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <p class="text-xs sm:text-sm text-stone-700 leading-relaxed">${item.def}</p>
+            <p class="text-xs italic text-stone-500 bg-parchment-50 p-2.5 rounded-xl border border-parchment-200">${item.quote}</p>
+          </div>
+
+          <div class="pt-2 border-t border-parchment-200 flex items-center justify-between text-xs">
+            <span class="text-sage-800 font-medium">${item.es}</span>
+            <button onclick="jumpToTranscriptTurn('${item.turnId}', '${key}')" class="text-autumn-700 hover:underline font-semibold text-[11px]">
+              See in Transcript →
+            </button>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function jumpToTranscriptTurn(turnId, vocabKey) {
+      switchTab('transcript');
+      setTimeout(() => {
+        if (vocabKey) inspectVocab(vocabKey);
+        const el = document.getElementById(turnId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.classList.remove('turn-highlight-flash');
+          void el.offsetWidth;
+          el.classList.add('turn-highlight-flash');
+        }
+      }, 100);
+    }
+
+    function renderFixes() {
+      document.getElementById('gentle-polishes-grid').innerHTML = DEMO_POLISHES.map(p => `
+        <div class="sanctuary-subcard rounded-2xl p-5 space-y-2.5 border-l-4 border-l-sage-500">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-sage-800">${p.topic}</span>
+            <span class="px-2 py-0.5 rounded-full bg-parchment-100 font-mono text-[11px] text-stone-600">🕒 ${p.time}</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-autumn-50/70 border border-autumn-200/80 text-xs text-stone-600">
+            <span class="font-semibold text-autumn-800">In the moment:</span> "${p.said}"
+          </div>
+          <div class="p-2.5 rounded-xl bg-sage-50 border border-sage-200 text-xs text-slatewarm-900 flex items-center justify-between gap-2">
+            <div><span class="font-semibold text-sage-800">Natural Polish:</span> <strong>"${p.natural}"</strong></div>
+            <button onclick="speakWord('${p.natural.replace(/'/g, "\\'")}')" class="p-1.5 rounded-lg bg-white text-sage-700 hover:bg-sage-100 shrink-0">
+              <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+          <p class="text-xs text-stone-600 leading-relaxed">${p.why}</p>
+        </div>
+      `).join('');
+
+      document.getElementById('asr-fixes-grid').innerHTML = DEMO_ASR_FIXES.map(f => `
+        <div class="sanctuary-subcard rounded-2xl p-4 space-y-2 border-t-2 border-t-autumn-400">
+          <div class="flex items-center justify-between text-[11px] font-mono text-stone-500">
+            <span>${f.speaker}</span>
+            <span>🕒 ${f.time}</span>
+          </div>
+          <div class="text-xs line-through text-stone-400">Note-taker wrote: "${f.wrong}"</div>
+          <div class="text-sm font-serif font-bold text-sage-800">Actually said: "${f.right}"</div>
+          <p class="text-xs text-stone-600 leading-relaxed">${f.note}</p>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderFlashcard() {
+      const key = DEMO_FLASHCARD_KEYS[currentCardIndex];
+      const item = DEMO_VOCAB_DB[key];
+      if (!item) return;
+
+      document.getElementById('fc-counter').textContent = `Card ${currentCardIndex + 1} of ${DEMO_FLASHCARD_KEYS.length}`;
+      document.getElementById('fc-badge').textContent = `${item.time} • ${item.pos} (${item.level})`;
+
+      const titleEl = document.getElementById('fc-front-title');
+      const subEl = document.getElementById('fc-sub');
+      const backEl = document.getElementById('fc-back-details');
+
+      if (!isCardFlipped) {
+        titleEl.textContent = item.word;
+        subEl.textContent = `${item.ipa} — Click card to reveal meaning & lesson context`;
+        backEl.classList.add('hidden');
+      } else {
+        titleEl.textContent = item.word;
+        subEl.textContent = item.def;
+        document.getElementById('fc-quote').textContent = item.quote;
+        document.getElementById('fc-es').textContent = item.es;
+        backEl.classList.remove('hidden');
+      }
+    }
+    function flipFlashcard() { isCardFlipped = !isCardFlipped; renderFlashcard(); }
+    function nextFlashcard() { isCardFlipped = false; currentCardIndex = (currentCardIndex + 1) % DEMO_FLASHCARD_KEYS.length; renderFlashcard(); }
+    function prevFlashcard() { isCardFlipped = false; currentCardIndex = (currentCardIndex - 1 + DEMO_FLASHCARD_KEYS.length) % DEMO_FLASHCARD_KEYS.length; renderFlashcard(); }
+    function speakCurrentFlashcard() { const item = DEMO_VOCAB_DB[DEMO_FLASHCARD_KEYS[currentCardIndex]]; if (item) speakWord(item.word); }
+
+    function renderQuiz() {
+      document.getElementById('quiz-container').innerHTML = DEMO_QUIZ.map((q, qIdx) => `
+        <div class="sanctuary-subcard rounded-2xl p-4 space-y-2.5">
+          <p class="text-xs sm:text-sm font-medium text-slatewarm-900">${q.q}</p>
+          <div class="flex flex-wrap gap-2">
+            ${q.options.map((opt, oIdx) => `
+              <button id="qbtn-${qIdx}-${oIdx}" onclick="answerQuiz(${qIdx}, ${oIdx})" class="px-3 py-1.5 rounded-xl border border-[#dfd0b5] bg-parchment-50 hover:bg-autumn-100 text-xs font-medium text-stone-700 transition">
+                ${opt}
+              </button>
+            `).join('')}
+          </div>
+          <p id="qexp-${qIdx}" class="hidden text-xs text-sage-800 bg-sage-50 p-2.5 rounded-xl border border-sage-200"></p>
+        </div>
+      `).join('');
+    }
+
+    function answerQuiz(qIdx, oIdx) {
+      const q = DEMO_QUIZ[qIdx];
+      const expEl = document.getElementById(`qexp-${qIdx}`);
+      q.options.forEach((_, idx) => {
+        const btn = document.getElementById(`qbtn-${qIdx}-${idx}`);
+        if (idx === q.correct) btn.className = 'px-3 py-1.5 rounded-xl border border-sage-500 bg-sage-600 text-white text-xs font-semibold';
+        else if (idx === oIdx) btn.className = 'px-3 py-1.5 rounded-xl border border-autumn-300 bg-autumn-100 text-autumn-900 text-xs';
+      });
+      expEl.textContent = `✨ ${q.explain}`;
+      expEl.classList.remove('hidden');
+
+      if (oIdx === q.correct && !quizAnswered.has(qIdx)) {
+        quizAnswered.add(qIdx);
+        document.getElementById('quiz-score-badge').textContent = `${quizAnswered.size} / ${DEMO_QUIZ.length} Completed`;
+        if (quizAnswered.size === DEMO_QUIZ.length && typeof confetti === 'function') {
+          confetti({ particleCount: 55, spread: 60, origin: { y: 0.7 }, colors: ['#be6f38', '#5b826f', '#e2b086'] });
+        }
+      }
+    }
+
+    function switchTab(tabName) {
+      ['transcript', 'vocab', 'fixes', 'places', 'practice'].forEach(t => {
+        const panel = document.getElementById(`tab-panel-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === tabName) {
+          panel.classList.remove('hidden');
+          btn.className = 'tab-btn flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 bg-sage-700 text-white shadow-sm';
+          gsap.fromTo(panel, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' });
+        } else {
+          panel.classList.add('hidden');
+          btn.className = 'tab-btn flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 text-stone-700 hover:bg-parchment-100';
+        }
+      });
+    }
+
+    function filterTranscript() { renderTranscript(); }
+    function scrollToChapter(chapId) {
+      document.getElementById('speaker-filter').value = 'all';
+      document.getElementById('transcript-search').value = '';
+      renderTranscript();
+      const el = document.getElementById(chapId);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    let highlightsOn = true;
+    function toggleVocabHighlights() {
+      highlightsOn = !highlightsOn;
+      document.body.classList.toggle('hide-vocab-highlights', !highlightsOn);
+      document.getElementById('btn-toggle-highlights').querySelector('span').textContent = `Vocab Highlights: ${highlightsOn ? 'On' : 'Off'}`;
+    }
+
+    let asrBadgesOn = true;
+    function toggleAsrBadges() {
+      asrBadgesOn = !asrBadgesOn;
+      document.body.classList.toggle('hide-asr-fixes', !asrBadgesOn);
+      document.getElementById('btn-toggle-asr').querySelector('span').textContent = `Note-Taker Fixes: ${asrBadgesOn ? 'Visible' : 'Hidden'}`;
+    }
+
+    function setThemeMood(mood) { document.body.setAttribute('data-theme', mood); }
+    let speechRate = 1.0;
+    function setVoiceRate(rate) { speechRate = rate; }
+
+    function speakWord(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'en-GB';
+      utter.rate = speechRate;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function speakPlainTurn(turnId) {
+      const turn = DEMO_TRANSCRIPT_TURNS.find(t => t.id === turnId);
+      if (!turn) return;
+      const temp = document.createElement('div');
+      temp.innerHTML = turn.html;
+      temp.querySelectorAll('.asr-fix-pill').forEach(el => el.remove());
+      speakWord(temp.textContent || '');
+    }
+
+    // Web Audio Soundscape
+    let audioCtx = null, soundscapePlaying = false, masterGain = null, lfoTimer = null, currentFilter = null;
+    function buildNoiseBuffer(ctx) {
+      const bufferSize = ctx.sampleRate * 4;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const output = buffer.getChannelData(0);
+      let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        b3 = 0.86650 * b3 + white * 0.3104856;
+        b4 = 0.55000 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.0168980;
+        output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.04;
+        b6 = white * 0.115926;
+      }
+      return buffer;
+    }
+
+    function toggleSoundscape() {
+      const label = document.getElementById('soundscape-label');
+      if (!soundscapePlaying) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const noiseSource = audioCtx.createBufferSource();
+        noiseSource.buffer = buildNoiseBuffer(audioCtx);
+        noiseSource.loop = true;
+        currentFilter = audioCtx.createBiquadFilter();
+        masterGain = audioCtx.createGain();
+        masterGain.gain.value = parseFloat(document.getElementById('soundscape-volume').value || '0.22');
+        noiseSource.connect(currentFilter);
+        currentFilter.connect(masterGain);
+        masterGain.connect(audioCtx.destination);
+        noiseSource.start();
+        audioCtx._activeSource = noiseSource;
+        soundscapePlaying = true;
+        changeSoundscapePreset(document.getElementById('soundscape-preset').value);
+        label.textContent = 'London Breeze: Playing';
+      } else {
+        if (lfoTimer) clearInterval(lfoTimer);
+        if (audioCtx && audioCtx._activeSource) { try { audioCtx._activeSource.stop(); } catch (e) {} }
+        soundscapePlaying = false;
+        label.textContent = 'London Breeze: Off';
+      }
+    }
+
+    function changeSoundscapePreset(preset) {
+      if (!currentFilter || !audioCtx) return;
+      if (lfoTimer) clearInterval(lfoTimer);
+      if (preset === 'breeze') {
+        currentFilter.type = 'bandpass';
+        currentFilter.frequency.value = 340;
+      } else if (preset === 'rain') {
+        currentFilter.type = 'lowpass';
+        currentFilter.frequency.value = 880;
+      } else {
+        currentFilter.type = 'lowpass';
+        currentFilter.frequency.value = 240;
+      }
+    }
+    function updateSoundscapeVolume(val) { if (masterGain && audioCtx) masterGain.gain.value = parseFloat(val); }
+
+    // Canvas Leaves
+    const canvas = document.getElementById('autumn-breeze-canvas');
+    const ctx = canvas.getContext('2d');
+    let leaves = [], leafMode = 1, breezeTime = 0;
+    const LEAF_COLORS = ['rgba(190,111,56,0.42)', 'rgba(211,140,87,0.40)', 'rgba(165,191,177,0.42)', 'rgba(203,179,142,0.45)'];
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    function rebuildLeaves() {
+      const count = leafMode === 1 ? 15 : leafMode === 2 ? 30 : 0;
+      leaves = Array.from({ length: count }, () => ({
+        x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+        size: 6 + Math.random() * 8, speedY: 0.35 + Math.random() * 0.55, speedX: 0.25 + Math.random() * 0.45,
+        angle: Math.random() * Math.PI * 2, spin: (Math.random() - 0.5) * 0.014, swayOffset: Math.random() * 100,
+        color: LEAF_COLORS[Math.floor(Math.random() * LEAF_COLORS.length)]
+      }));
+    }
+    function cycleLeafBreeze() {
+      leafMode = (leafMode + 1) % 3;
+      document.getElementById('leaves-label').textContent = leafMode === 1 ? 'Leaves: Gentle' : leafMode === 2 ? 'Leaves: Breeze' : 'Leaves: Still';
+      rebuildLeaves();
+    }
+    function animateLeaves() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (leafMode !== 0) {
+        breezeTime += 0.01;
+        leaves.forEach(l => {
+          l.y += l.speedY; l.x += l.speedX + Math.sin(breezeTime + l.swayOffset) * 0.45; l.angle += l.spin;
+          if (l.y > canvas.height + 20) { l.y = -20; l.x = Math.random() * canvas.width; }
+          if (l.x > canvas.width + 20) l.x = -20;
+          ctx.save(); ctx.translate(l.x, l.y); ctx.rotate(l.angle); ctx.fillStyle = l.color;
+          ctx.beginPath(); ctx.ellipse(0, 0, l.size, l.size * 0.52, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+        });
+      }
+      requestAnimationFrame(animateLeaves);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderTranscript();
+      renderVocabGrid();
+      renderFixes();
+      renderFlashcard();
+      renderQuiz();
+      inspectVocab('serendipity');
+      rebuildLeaves();
+      animateLeaves();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
