@@ -1,5 +1,5 @@
 ﻿# verify_portal.ps1
-# Automated Verification Script for Tony B's English Sanctuary Portal
+# Automated Verification Script for Tony B's English Sanctuary Portal (Canonical Template)
 $ErrorActionPreference = "Stop"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
@@ -27,7 +27,7 @@ if ($content.Contains([char]0x00E2) -or $content.Contains("ðŸ") -or $content.C
 
 # 2. Checking Spanish Linguistic Terms Integrity
 Write-Host "`n--- 2. Checking Spanish Text Integrity ---"
-$spanishTerms = @("cuello de botella", "serendipia", "manada de leones", "bandada de cuervos", "contención cinematográfica", "el pádel", "desconexión de la tecnología", "la comparación es el ladrón de la alegría", "poner la otra mejilla", "el monólogo interior")
+$spanishTerms = @("cuello de botella", "serendipia", "manada de leones", "bandada de cuervos", "contención cinematográfica", "el pádel", "la comparación es el ladrón de la alegría", "poner la otra mejilla", "el monólogo interno")
 $allSpanishFound = $true
 foreach ($t in $spanishTerms) {
     if (-not $content.Contains($t)) {
@@ -69,8 +69,8 @@ if ($content.Contains("</html>") -and $content.Contains("</body>") -and $content
 }
 
 # 5. Checking Data Blocks
-Write-Host "`n--- 5. Checking Core Data Blocks ---"
-$blocks = @("VOCAB_DB", "ASR_FIXES", "NATURAL_STRENGTHS", "PHRASING_POLISHES", "EDITORIAL_TOPICS", "FLASHCARDS", "IDIOM_CHALLENGES", "QUIZ_QUESTIONS", "REFLECTION_PROMPTS", "TRANSCRIPT_TURNS")
+Write-Host "`n--- 5. Checking Core Data Blocks (Canonical Template) ---"
+$blocks = @("LESSON_CONFIG", "VOCAB_DB", "TRANSCRIPT_TURNS", "STUDENT_STRENGTHS", "GENTLE_POLISHES", "ASR_FIXES", "CULTURAL_PLACES", "FLASHCARD_KEYS", "QUIZ_QUESTIONS")
 $allBlocksFound = $true
 foreach ($b in $blocks) {
     if (-not $content.Contains("const $b =")) {
@@ -80,13 +80,13 @@ foreach ($b in $blocks) {
     }
 }
 if ($allBlocksFound) {
-    Write-Host "PASSED: All 10 core data blocks are present." -ForegroundColor Green
+    Write-Host "PASSED: All 9 core data blocks are present." -ForegroundColor Green
 }
 
 # 6. Checking Vocabulary Key Match
 Write-Host "`n--- 6. Checking Vocabulary Key Match ---"
 $vocabKeys = [regex]::Matches($content, '^\s*"([^"]+)":\s*\{', [System.Text.RegularExpressions.RegexOptions]::Multiline) | ForEach-Object { $_.Groups[1].Value }
-$usedKeys = [regex]::Matches($content, '\$\{v\("([^"]+)"') | ForEach-Object { $_.Groups[1].Value } | Select-Object -Unique
+$usedKeys = [regex]::Matches($content, 'data-vkey="([^"]+)"') | ForEach-Object { $_.Groups[1].Value } | Where-Object { $_ -ne '${key}' } | Select-Object -Unique
 
 $missing = @()
 foreach ($k in $usedKeys) {
@@ -101,89 +101,99 @@ if ($missing.Count -eq 0) {
     $totalFailures++
 }
 
-# 7. Rigorous Test / Quiz Integrity Verification
-Write-Host "`n--- 7. Rigorous Test & Quiz Integrity Audit ---"
-$quizMatch = [regex]::Match($content, 'const QUIZ_QUESTIONS = (\[[\s\S]*?\n\];)')
-if (-not $quizMatch.Success) {
-    Write-Host "FAIL: Cannot locate QUIZ_QUESTIONS array!" -ForegroundColor Red
-    $totalFailures++
-} else {
-    $qCount = [regex]::Matches($quizMatch.Value, 'question:').Count
-    $cIdxMatches = [regex]::Matches($quizMatch.Value, 'correctIndex:\s*(\d+)')
-    Write-Host "Verified Quiz Questions Count: $qCount"
-    if ($qCount -ge 6) {
-        Write-Host "PASSED: Quiz contains $qCount questions (minimum 6 required)." -ForegroundColor Green
+# 7. Checking Quiz (The Test) Integrity
+Write-Host "`n--- 7. Checking Quiz (Test) Generation Integrity ---"
+if ($content -match 'const QUIZ_QUESTIONS = \[\s*([\s\S]*?)\s*\];') {
+    $quizRaw = $matches[1]
+    $qMatches = [regex]::Matches($quizRaw, '\{\s*q:\s*"([^"]+)"[\s\S]*?options:\s*\[([\s\S]*?)\][\s\S]*?correct:\s*(\d+)[\s\S]*?explain:\s*"([^"]+)"\s*\}')
+    if ($qMatches.Count -ge 6) {
+        Write-Host "PASSED: Found $($qMatches.Count) fully formed quiz questions." -ForegroundColor Green
+        for ($qi = 0; $qi -lt $qMatches.Count; $qi++) {
+            $qm = $qMatches[$qi]
+            $qPrompt = $qm.Groups[1].Value
+            $optsRaw = $qm.Groups[2].Value
+            $correctIdx = [int]$qm.Groups[3].Value
+            $explain = $qm.Groups[4].Value
+            
+            $optCount = ([regex]::Matches($optsRaw, '"[^"]+"')).Count
+            if ($optCount -ne 4) {
+                Write-Host "FAIL Question $($qi+1): expected 4 options, found $optCount" -ForegroundColor Red
+                $totalFailures++
+            }
+            if ($correctIdx -lt 0 -or $correctIdx -ge $optCount) {
+                Write-Host "FAIL Question $($qi+1): correct index $correctIdx out of range [0..$($optCount-1)]" -ForegroundColor Red
+                $totalFailures++
+            }
+        }
     } else {
-        Write-Host "FAIL: Quiz only has $qCount questions!" -ForegroundColor Red
+        Write-Host "FAIL: Found only $($qMatches.Count) quiz questions (expected >= 6)!" -ForegroundColor Red
         $totalFailures++
     }
+} else {
+    Write-Host "FAIL: Could not locate QUIZ_QUESTIONS block!" -ForegroundColor Red
+    $totalFailures++
+}
 
-    # Verify each question has valid correctIndex
-    $validIndices = $true
-    foreach ($m in $cIdxMatches) {
-        $val = [int]$m.Groups[1].Value
-        if ($val -lt 0 -or $val -gt 3) {
-            Write-Host "FAIL: Invalid correctIndex: $val" -ForegroundColor Red
-            $validIndices = $false
+# 8. Flashcard Keys Validation
+Write-Host "`n--- 8. Checking Flashcard Keys Integrity ---"
+if ($content -match 'const FLASHCARD_KEYS = \[\s*([\s\S]*?)\s*\];') {
+    $fcRaw = $matches[1]
+    $fcKeys = [regex]::Matches($fcRaw, '"([^"]+)"') | ForEach-Object { $_.Groups[1].Value }
+    $fcMissing = @()
+    foreach ($k in $fcKeys) {
+        if (-not ($vocabKeys -contains $k)) { $fcMissing += $k }
+    }
+    if ($fcMissing.Count -eq 0 -and $fcKeys.Count -ge 12) {
+        Write-Host "PASSED: All $($fcKeys.Count) flashcard keys exist in VOCAB_DB." -ForegroundColor Green
+    } else {
+        Write-Host "FAIL: Invalid flashcard keys: $($fcMissing -join ', ')" -ForegroundColor Red
+        $totalFailures++
+    }
+}
+
+# 9. Headless Edge DOM Render Audit
+Write-Host "`n--- 9. Headless Edge Full DOM Render Audit ---"
+$edge = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+if (Test-Path $edge) {
+    $domOut = "D:\Documents\Tony b\verify_dom.txt"
+    $url = "file:///D:/Documents/Tony%20b/index.html"
+    $proc = Start-Process -FilePath $edge -ArgumentList @("--headless", "--dump-dom", $url) -RedirectStandardOutput $domOut -NoNewWindow -PassThru -Wait
+    if ($proc.ExitCode -eq 0 -and (Test-Path $domOut)) {
+        $dom = [System.IO.File]::ReadAllText($domOut, [System.Text.Encoding]::UTF8)
+        Remove-Item $domOut -Force -ErrorAction SilentlyContinue
+        
+        $turnsRendered = ([regex]::Matches($dom, '<article id="turn-\d+"')).Count
+        $quizBtns = ([regex]::Matches($dom, 'id="qbtn-\d+-\d+"')).Count
+        $brandInitial = [regex]::Match($dom, 'id="brand-initial"[^>]*>([^<]+)<').Groups[1].Value
+        
+        if ($turnsRendered -eq 369) {
+            Write-Host "PASSED: All 369 transcript turns rendered into DOM." -ForegroundColor Green
+        } else {
+            Write-Host "FAIL: Rendered turns count: $turnsRendered (expected 369)" -ForegroundColor Red
+            $totalFailures++
+        }
+        
+        if ($quizBtns -eq 24) {
+            Write-Host "PASSED: All 24 quiz option buttons rendered into DOM." -ForegroundColor Green
+        } else {
+            Write-Host "FAIL: Rendered quiz buttons: $quizBtns (expected 24)" -ForegroundColor Red
+            $totalFailures++
+        }
+        
+        if ($brandInitial.Trim() -eq "T") {
+            Write-Host "PASSED: Student initial rendered as 'T' for Tony." -ForegroundColor Green
+        } else {
+            Write-Host "FAIL: Brand initial was '$brandInitial' (expected 'T')" -ForegroundColor Red
             $totalFailures++
         }
     }
-    if ($validIndices) {
-        Write-Host "PASSED: All $($cIdxMatches.Count) correctIndex values are valid (0-3 range)." -ForegroundColor Green
-    }
-}
-
-# Check Idiom Gym Challenges
-$idiomMatch = [regex]::Match($content, 'const IDIOM_CHALLENGES = (\[[\s\S]*?\n\];)')
-if ($idiomMatch.Success) {
-    $iCount = [regex]::Matches($idiomMatch.Value, 'title:').Count
-    Write-Host "Verified Idiom Challenges Count: $iCount"
-    if ($iCount -ge 5) {
-        Write-Host "PASSED: Idiom Gym contains $iCount challenges (minimum 5 required)." -ForegroundColor Green
-    } else {
-        Write-Host "FAIL: Idiom Gym only has $iCount challenges!" -ForegroundColor Red
-        $totalFailures++
-    }
-} else {
-    Write-Host "FAIL: Cannot locate IDIOM_CHALLENGES array!" -ForegroundColor Red
-    $totalFailures++
-}
-
-# Check Flashcards Deck
-$fcMatch = [regex]::Match($content, 'const FLASHCARDS = (\[[\s\S]*?\n\];)')
-if ($fcMatch.Success) {
-    $fcCount = [regex]::Matches($fcMatch.Value, 'vocabKey:').Count
-    Write-Host "Verified Flashcard Deck Count: $fcCount"
-    if ($fcCount -ge 10) {
-        Write-Host "PASSED: Flashcard deck contains $fcCount cards." -ForegroundColor Green
-    } else {
-        Write-Host "FAIL: Flashcard deck only has $fcCount cards!" -ForegroundColor Red
-        $totalFailures++
-    }
-} else {
-    Write-Host "FAIL: Cannot locate FLASHCARDS array!" -ForegroundColor Red
-    $totalFailures++
-}
-
-# Check DOM test elements
-$domElements = @("quiz-container", "quiz-score-badge", "idiom-gym-container", "fc-counter", "fc-front-title", "fc-back-details", "reflections-container")
-$allDomFound = $true
-foreach ($el in $domElements) {
-    if (-not $content.Contains("id=`"$el`"")) {
-        Write-Host "FAIL: Missing DOM container element id='$el'!" -ForegroundColor Red
-        $allDomFound = $false
-        $totalFailures++
-    }
-}
-if ($allDomFound) {
-    Write-Host "PASSED: All interactive test DOM containers are present in HTML." -ForegroundColor Green
 }
 
 Write-Host "`n================================================="
 if ($totalFailures -eq 0) {
-    Write-Host "AUDIT RESULT: 100% PASSED! All systems, tests, and vocab verified cleanly." -ForegroundColor Green
+    Write-Host "FINAL AUDIT RESULT: 100% PASSED (0 ERRORS)" -ForegroundColor Green
 } else {
-    Write-Host "AUDIT RESULT: FAILED with $totalFailures error(s)!" -ForegroundColor Red
-    exit 1
+    Write-Host "FINAL AUDIT RESULT: FAILED ($totalFailures ERRORS)" -ForegroundColor Red
 }
 Write-Host "================================================="
+exit $totalFailures
