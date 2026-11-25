@@ -1449,7 +1449,10 @@
   if ($("speakFinalBtn")) {
     $("speakFinalBtn").addEventListener("click", () => {
       const ansVisible = !finalAnswerBox.classList.contains("hidden");
-
+      const textToRead = ansVisible ? `${finalClueText.textContent}. ${finalAnswerText.textContent}` : finalClueText.textContent;
+      speakSlowEnglish(textToRead);
+    });
+  }
 
   // =========================
   // Language Hint & Translation Helpers (Spanish for Tony B)
@@ -1831,7 +1834,7 @@
   }
   if ($("speakHowToPhraseBtn")) {
     $("speakHowToPhraseBtn").addEventListener("click", () => {
-      speakSlowEnglish("Could I have Chemistry and Weird Science for two hundred, please?");
+      speakSlowEnglish("Could I have Cinema and Character Arcs for three hundred, please?");
     });
   }
 
