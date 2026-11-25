@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tony's Cinema &amp; Fluency Jeopardy • English with Tony B 🇪🇸</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="jeopardy_styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="brand">
+        <a href="index.html" class="btn btn-secondary" style="text-decoration:none; padding:6px 10px;" title="Back to Tony's English Sanctuary">← Sanctuary</a>
+        <span class="brand-badge">TONY B 🇪🇸</span>
+        <h1>CINEMA &amp; FLUENCY JEOPARDY!</h1>
+      </div>
+
+      <div class="controls">
+        <button id="howToPlayBtn" class="btn btn-green" type="button" title="How to Play (English &amp; Español)">
+          🇪🇸 ¿Cómo se juega? (How to Play)
+        </button>
+
+        <label class="control-group">
+          <span>Deck:</span>
+          <select id="presetSelect" aria-label="Select preset board"></select>
+        </label>
+
+        <label class="control-group">
+          <span>Timer:</span>
+          <select id="timerSelect" aria-label="Clue timer duration">
+            <option value="0">Off</option>
+            <option value="20">20s</option>
+            <option value="30">30s</option>
+            <option value="45" selected>45s</option>
+            <option value="50">50s</option>
+            <option value="60">60s</option>
+            <option value="90">90s</option>
+          </select>
+        </label>
+
+        <button id="soundToggleBtn" class="btn btn-ghost" type="button" title="Toggle Sound Effects">
+          🔊 Sound On
+        </button>
+        <button id="musicToggleBtn" class="btn btn-ghost" type="button" title="Toggle Thinking Music">
+          🎵 Music On
+        </button>
+        <button id="blitzBtn" class="btn btn-blitz" type="button" title="5 in 15 Seconds Bonus Round">
+          ⚡ Category Blitz
+        </button>
+        <button id="tabooBtn" class="btn btn-taboo" type="button" title="Taboo Bonus Round (Heads Up Style)">
+          🚫 Taboo
+        </button>
+        <button id="structureBtn" class="btn btn-structure" type="button" title="Structure Sprint Bonus Round (30s–60s Fluency)">
+          ⏱️ Structure
+        </button>
+        <button id="editBoardBtn" class="btn btn-secondary" type="button">
+          ✏️ Edit Board
+        </button>
+        <button id="finalJeopardyBtn" class="btn btn-gold" type="button">
+          🏆 Final Jeopardy
+        </button>
+        <button id="resetBoardBtn" class="btn btn-ghost" type="button" title="Reset board">
+          ↺ Reset
+        </button>
+      </div>
+    </header>
+
+    <!-- Scoreboard -->
+    <section class="scoreboard" id="scoreboard" aria-label="Player Scores"></section>
+
+    <!-- Game Board -->
+    <main class="board-wrapper">
+      <div class="jeopardy-board" id="jeopardyBoard" role="grid" aria-label="Jeopardy Game Board"></div>
+    </main>
+  </div>
+
+  <!-- Clue Modal -->
+  <div class="modal-backdrop hidden" id="clueModal" role="dialog" aria-modal="true" aria-labelledby="modalCategory">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-meta">
+          <span id="modalCategory" class="modal-category">CATEGORY</span>
+          <span id="modalValue" class="modal-value">$200</span>
+          <span id="dailyDoubleBadge" class="dd-badge hidden">★ DAILY DOUBLE ★</span>
+        </div>
+        <div class="modal-timer-wrap">
+          <div id="modalTimer" class="modal-timer hidden">45</div>
+          <button id="closeModalBtn" class="btn-icon" type="button" title="Close (Esc)">✕</button>
+        </div>
+      </div>
+
+      <!-- Daily Double Wager View -->
+      <div id="wagerView" class="wager-view hidden">
+        <h2>DAILY DOUBLE!</h2>
+        <p>Choose who is answering and how many points to wager:</p>
+        <div class="wager-controls">
+          <select id="wagerPlayerSelect" aria-label="Select player for Daily Double"></select>
+          <input id="wagerInput" type="number" min="50" step="50" value="400" />
+          <button id="lockWagerBtn" class="btn btn-gold" type="button">Reveal Clue</button>
+        </div>
+      </div>
+
+      <!-- Clue & Answer View -->
+      <div id="clueView" class="clue-view">
+        <div class="clue-text" id="clueText">Clue goes here</div>
+        <div class="translate-box hidden" id="clueTranslateBox">
+          <span class="translate-label" id="clueTranslateLabel">🇪🇸 Pista en Español</span>
+          <div class="translate-text" id="clueTranslateText"></div>
+        </div>
+        <div class="answer-box hidden" id="answerBox">
+          <span class="answer-label">Suggested Answer &amp; Lesson Note</span>
+          <div class="answer-text" id="answerText">Answer goes here</div>
+        </div>
+      </div>
+
+      <!-- Scoring Footer -->
+      <div class="modal-footer" id="modalFooter">
+        <div class="reveal-row">
+          <button id="revealAnswerBtn" class="btn btn-gold btn-lg" type="button">
+            Show Answer (Space)
+          </button>
+          <button id="speakClueBtn" class="btn btn-secondary btn-lg" type="button" title="Read Clue / Answer Aloud">
+            🐢🔊 Read Aloud
+          </button>
+          <button id="translateClueBtn" class="btn btn-secondary btn-lg" type="button">
+            🇪🇸 Pista en Español
+          </button>
+        </div>
+        <div class="award-row" id="awardRow"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Final Jeopardy Modal -->
+  <div class="modal-backdrop hidden" id="finalModal" role="dialog" aria-modal="true">
+    <div class="modal-card modal-card-wide">
+      <div class="modal-header">
+        <div class="modal-meta">
+          <span class="modal-category">FINAL JEOPARDY</span>
+          <span id="finalCategoryBadge" class="modal-value">THE BIG CHALLENGE</span>
+        </div>
+        <button id="closeFinalBtn" class="btn-icon" type="button">✕</button>
+      </div>
+
+      <div id="finalWagerStage" class="final-stage">
+        <p class="final-subtitle">Set each player's wager before revealing the Final Jeopardy clue:</p>
+        <div id="finalWagersList" class="final-wagers-list"></div>
+        <div class="final-actions">
+          <button id="revealFinalClueBtn" class="btn btn-gold btn-lg" type="button">Reveal Final Clue</button>
+        </div>
+      </div>
+
+      <div id="finalClueStage" class="final-stage hidden">
+        <div class="clue-text" id="finalClueText"></div>
+        <div class="translate-box hidden" id="finalTranslateBox">
+          <span class="translate-label" id="finalTranslateLabel">🇪🇸 Pista en Español</span>
+          <div class="translate-text" id="finalTranslateText"></div>
+        </div>
+        <div class="answer-box hidden" id="finalAnswerBox">
+          <span class="answer-label">Answer</span>
+          <div class="answer-text" id="finalAnswerText"></div>
+        </div>
+        <div class="final-actions" style="gap: 10px;">
+          <button id="showFinalAnswerBtn" class="btn btn-gold" type="button">Show Answer</button>
+          <button id="speakFinalBtn" class="btn btn-secondary" type="button">🐢🔊 Read Aloud</button>
+          <button id="translateFinalBtn" class="btn btn-secondary" type="button">🇪🇸 Pista en Español</button>
+        </div>
+        <div id="finalResolveList" class="final-resolve-list hidden"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Board Editor Modal -->
+  <div class="modal-backdrop hidden" id="editorModal" role="dialog" aria-modal="true">
+    <div class="modal-card modal-card-editor">
+      <div class="modal-header">
+        <div class="modal-meta">
+          <span class="modal-category">BOARD EDITOR</span>
+          <span class="modal-hint">Changes save automatically to your browser</span>
+        </div>
+        <button id="closeEditorBtn" class="btn-icon" type="button">✕</button>
+      </div>
+
+      <div class="editor-toolbar">
+        <div class="editor-players">
+          <label>
+            Players (1–4):
+            <input id="playerCountInput" type="number" min="1" max="4" value="2" />
+          </label>
+          <div id="playerNamesInputs" class="player-names-inputs"></div>
+        </div>
+        <div class="editor-io">
+          <button id="exportJsonBtn" class="btn btn-secondary" type="button">⬇ Export JSON</button>
+          <label class="btn btn-secondary file-btn">
+            ⬆ Import JSON
+            <input id="importJsonInput" type="file" accept="application/json" hidden />
+          </label>
+        </div>
+      </div>
+
+      <div id="editorGrid" class="editor-grid"></div>
+
+      <div class="editor-final-box">
+        <h3>Final Jeopardy</h3>
+        <div class="editor-final-fields">
+          <input id="editFinalCat" type="text" placeholder="Final Category" />
+          <input id="editFinalClue" type="text" placeholder="Final Clue" />
+          <input id="editFinalAnswer" type="text" placeholder="Final Answer" />
+        </div>
+      </div>
+
+      <div class="modal-footer editor-footer">
+        <button id="saveEditorBtn" class="btn btn-gold btn-lg" type="button">Save &amp; Return to Board</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Blitz (5 in 15 Seconds) Modal -->
+  <div class="modal-backdrop hidden" id="blitzModal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-meta">
+          <span class="modal-category">⚡ CATEGORY BLITZ</span>
+          <span class="dd-badge">5 IN 15 SECONDS</span>
+        </div>
+        <div class="modal-timer-wrap">
+          <div id="blitzTimer" class="modal-timer">15.0</div>
+          <button id="closeBlitzBtn" class="btn-icon" type="button" title="Close (Esc)">✕</button>
+        </div>
+      </div>
+
+      <div class="blitz-body">
+        <div class="blitz-counter-label" id="blitzCounterLabel">Prompt 1 of 6</div>
+        <div class="clue-text blitz-prompt" id="blitzPrompt">Name 5 FILM GENRES or BLOCKBUSTERS in 15 seconds!</div>
+        <div class="translate-box hidden" id="blitzTranslateBox">
+          <span class="translate-label" id="blitzTranslateLabel">🇪🇸 Pista en Español</span>
+          <div class="translate-text" id="blitzTranslateText"></div>
+        </div>
+
+        <div class="blitz-dots" id="blitzDots" aria-label="5-item tracker">
+          <button type="button" class="blitz-dot" data-dot="0">1</button>
+          <button type="button" class="blitz-dot" data-dot="1">2</button>
+          <button type="button" class="blitz-dot" data-dot="2">3</button>
+          <button type="button" class="blitz-dot" data-dot="3">4</button>
+          <button type="button" class="blitz-dot" data-dot="4">5</button>
+        </div>
+
+        <div class="blitz-controls">
+          <button id="blitzStartBtn" class="btn btn-gold btn-lg" type="button">▶ Start 15s Timer</button>
+          <button id="blitzNextBtn" class="btn btn-secondary btn-lg" type="button">Next Prompt →</button>
+          <button id="translateBlitzBtn" class="btn btn-secondary" type="button">🇪🇸 Español</button>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="award-row" id="blitzAwardRow"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Taboo Bonus Modal -->
+  <div class="modal-backdrop hidden" id="tabooModal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-meta">
+          <span class="modal-category">🚫 TABOO BONUS ROUND</span>
+          <span class="modal-value" id="tabooRoundScore">Round: $0</span>
+        </div>
+        <div class="modal-timer-wrap">
+          <div id="tabooTimer" class="modal-timer">45</div>
+          <button id="closeTabooBtn" class="btn-icon" type="button" title="Close (Esc)">✕</button>
+        </div>
+      </div>
+
+      <div class="taboo-body">
+        <p class="taboo-instruction">Describe the word directly in English WITHOUT translating in your head or saying any forbidden words!</p>
+
+        <div class="taboo-card">
+          <div class="taboo-target" id="tabooTarget">BOTTLENECK 🧠</div>
+          <div class="taboo-forbidden-label">FORBIDDEN WORDS</div>
+          <ul class="taboo-list" id="tabooList"></ul>
+        </div>
+        <div class="translate-box hidden" id="tabooTranslateBox">
+          <span class="translate-label" id="tabooTranslateLabel">🇪🇸 Pista en Español</span>
+          <div class="translate-text" id="tabooTranslateText"></div>
+        </div>
+
+        <div class="blitz-controls">
+          <button id="tabooStartBtn" class="btn btn-gold" type="button">▶ Start 45s Timer</button>
+          <button id="tabooGotItBtn" class="btn btn-green btn-lg" type="button">✓ Got It! (+$200)</button>
+          <button id="tabooBuzzBtn" class="btn btn-red" type="button">✕ Taboo / Skip (-$100)</button>
+          <button id="tabooNextBtn" class="btn btn-secondary" type="button">Next Card →</button>
+          <button id="translateTabooBtn" class="btn btn-secondary" type="button">🇪🇸 Español</button>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="award-row" id="tabooAwardRow"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Structure Sprint Bonus Modal -->
+  <div class="modal-backdrop hidden" id="structureModal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-meta">
+          <span class="modal-category">⏱️ STRUCTURE SPRINT</span>
+          <span class="dd-badge" id="structureFrameworkBadge">POINT • EXAMPLE • CONCLUSION</span>
+        </div>
+        <div class="modal-timer-wrap">
+          <div id="structureTimer" class="modal-timer">30</div>
+          <button id="closeStructureBtn" class="btn-icon" type="button" title="Close (Esc)">✕</button>
+        </div>
+      </div>
+
+      <div class="structure-body">
+        <div class="blitz-counter-label" id="structureCounterLabel">Topic 1 of 6</div>
+        <div class="clue-text blitz-prompt" id="structurePrompt">Modern Cinema &amp; Commercialization (30s Pitch) 🎬</div>
+
+        <div class="structure-phases" id="structurePhases" aria-label="Structure Phases">
+          <button type="button" class="phase-pill active" data-phase="0">1. CORE STANCE</button>
+          <button type="button" class="phase-pill" data-phase="1">2. WHY IT MATTERS</button>
+          <button type="button" class="phase-pill" data-phase="2">3. CONCISE WRAP-UP</button>
+        </div>
+
+        <div class="structure-tip" id="structureTip">Speak directly in English without translating from Spanish—keep it punchy and clear!</div>
+
+        <div class="filler-bar">
+          <span class="filler-label">Filler Slips: <strong id="fillerCount">0</strong></span>
+          <button id="fillerPlusBtn" class="btn btn-red" type="button">+1 Um / Ah</button>
+          <button id="fillerResetBtn" class="btn btn-ghost" type="button">Reset</button>
+        </div>
+
+        <div class="blitz-controls">
+          <button id="structureStartBtn" class="btn btn-gold btn-lg" type="button">▶ Start 30s Phase</button>
+          <button id="structureNextPhaseBtn" class="btn btn-secondary btn-lg" type="button">Next Phase →</button>
+          <button id="structureNextTopicBtn" class="btn btn-secondary" type="button">Next Topic ↻</button>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="award-row" id="structureAwardRow"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How to Play Modal (English & Español) -->
+  <div class="modal-backdrop hidden" id="howToPlayModal" role="dialog" aria-modal="true" aria-labelledby="howToPlayTitle">
+    <div class="modal-card modal-card-wide">
+      <div class="modal-header">
+        <div class="modal-meta">
+          <span class="modal-category" id="howToPlayTitle">🇪🇸 ¿CÓMO SE JUEGA? (HOW TO PLAY)</span>
+          <span class="dd-badge">CINEMA &amp; DIRECT FLUENCY</span>
+        </div>
+        <button id="closeHowToPlayBtn" class="btn-icon" type="button" title="Close (Esc)">✕</button>
+      </div>
+
+      <div class="howto-body">
+        <div class="howto-banner">
+          <div class="howto-banner-title">👋 ¡Bienvenido, Tony! (Welcome to Your Lesson Jeopardy!)</div>
+          <div class="howto-banner-sub">A custom Jeopardy board built from your sessions with Louie—covering <strong>overcoming the translation bottleneck, cinema &amp; character arcs, emotional nuance, cultural false friends, and Heads Up drills</strong>!</div>
+        </div>
+
+        <div class="howto-grid">
+          <div class="howto-step">
+            <div class="howto-num">1</div>
+            <div class="howto-content">
+              <div class="howto-title">Pick a Category &amp; Value ($100 – $500)</div>
+              <div class="howto-oromo">
+                Elige una categoría (<strong>1–5</strong>) y una casilla de <strong>$100 a $500</strong>. Las de <strong>$100</strong> son calentamiento rápido y las de <strong>$500</strong> son retos de fluidez. ¡Cuidado con el <strong>Daily Double</strong> oculto!
+              </div>
+              <div class="howto-en">Choose any column and dollar amount—watch out for the hidden Daily Double!</div>
+            </div>
+          </div>
+
+          <div class="howto-step">
+            <div class="howto-num">2</div>
+            <div class="howto-content">
+              <div class="howto-title">Read, Listen, or Peek at a Spanish Hint 🐢🔊</div>
+              <div class="howto-oromo">
+                Pulsa <strong>"🐢🔊 Read Aloud"</strong> para escuchar la pronunciación británica, o <strong>"🇪🇸 Pista en Español"</strong> si necesitas una ayuda rápida.
+              </div>
+              <div class="howto-en">Tap "Read Aloud" for audio or "Pista en Español" whenever you want a quick hint.</div>
+            </div>
+          </div>
+
+          <div class="howto-step">
+            <div class="howto-num">3</div>
+            <div class="howto-content">
+              <div class="howto-title">Think Directly in English (Open the Bottleneck!) 🗣️</div>
+              <div class="howto-oromo">
+                Responde en <strong>2–3 frases completas y naturales</strong> sin traducir palabra por palabra desde el español. ¡Si te falta una palabra, descríbela como en <em>Heads Up</em>!
+              </div>
+              <div class="howto-en">Answer in 2–3 natural sentences—if a word slips your mind, describe it directly in English!</div>
+            </div>
+          </div>
+
+          <div class="howto-step">
+            <div class="howto-num">4</div>
+            <div class="howto-content">
+              <div class="howto-title">Bonus Rounds &amp; Final Jeopardy 🏆</div>
+              <div class="howto-oromo">
+                Prueba los modos extra arriba: <strong>⚡ Category Blitz</strong> (5 en 15s), <strong>🚫 Taboo</strong> (estilo Heads Up) y <strong>⏱️ Structure Sprint</strong> (retos de 30s).
+              </div>
+              <div class="howto-en">Try Category Blitz, Taboo, Structure Sprint, and Final Jeopardy to take the crown!</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="howto-say-box">
+          <div class="howto-say-label">🗣️ Say this in English to choose a tile:</div>
+          <div class="howto-say-row">
+            <span class="howto-say-phrase">"Could I have Cinema and Character Arcs for three hundred, please?"</span>
+            <button id="speakHowToPhraseBtn" class="btn btn-gold" type="button">🐢🔊 Listen</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="justify-content: center;">
+        <button id="startFromHowToBtn" class="btn btn-green btn-lg" type="button">
+          ✅ Unplug &amp; Let's Play!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="jeopardy_app.js" defer></script>
+</body>
+</html>
