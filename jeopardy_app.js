@@ -6,257 +6,257 @@
 
   const PRESET_DECKS = {
     tony_sanctuary: {
-      name: "Tony's Lesson 1 & 2: Cinema, Fluency & Nuance 🎬",
+      name: "Tony's Cinema, Idioms & Culture Quiz 🎬",
       categories: [
         {
-          title: "1. Escape the Bottleneck 🧠",
+          title: "1. Cinema & Oscars Quiz 🎬",
           clues: [
             {
-              clue: "🚦 Traffic Jam in Your Brain! When you translate Spanish → English in your head before speaking, it creates a mental traffic jam. What 1-word noun did Louie call it—and how do we blast it open?",
-              answer: "A BOTTLENECK! You blast it open with rapid, low-stress speaking drills so words fire straight in English.",
-              spanish: "Un cuello de botella (bottleneck): el atasco mental por traducir antes de hablar."
+              clue: "Which 2023 A24 Holocaust drama—filmed mostly in a sunny family garden right beside Auschwitz—won the Oscar for Best International Feature and Best Sound?",
+              answer: "THE ZONE OF INTEREST (directed by Jonathan Glazer)—famous for its chilling cinematic restraint.",
+              spanish: "La zona de interés (The Zone of Interest), dirigida por Jonathan Glazer."
             },
             {
-              clue: "🎤 15-Second Smoothness Challenge! Say 2 connected sentences about your workday WITHOUT pausing to translate—and drop in the B2 word meaning 'logical clarity'!",
-              answer: "COHERENCE! ('I want to build my coherence when explaining complex ideas at work.')",
-              spanish: "Coherencia (coherence): claridad lógica al enlazar ideas en inglés."
+              clue: "In 'The Matrix' (1999), Morpheus offers Neo two pills. Which color wakes him up to the real world—and what does taking the other pill do?",
+              answer: "RED PILL wakes him up to reality; BLUE PILL keeps him comfortably asleep in the simulation!",
+              spanish: "Pastilla roja (despertar a la realidad) frente a pastilla azul (seguir en la simulación)."
             },
             {
-              clue: "🛟 Tech Disaster! Your Wi-Fi dies 2 minutes before a big meeting—good thing you built an offline backup! Which C1 noun means 'a backup plan for unexpected events'?",
-              answer: "CONTINGENCY! ('I planned for that contingency—so the game works offline too!')",
-              spanish: "Contingencia (contingency): plan de respaldo por si algo falla."
+              clue: "In 'The Martian' (2015), astronaut Mark Watney is stranded alone on Mars. What single vegetable does he manage to farm inside the Hab to survive?",
+              answer: "POTATOES! (Grown using Martian soil, water, and a lot of science and humor.)",
+              spanish: "Patatas (potatoes): las cultiva en Marte para sobrevivir."
             },
             {
-              clue: "✨ Happy Accident vs. Live Notes: You bump into your favorite actor at a café by pure luck (C2 noun), AND Louie's app writes timestamps as you speak (C1 verb). Name BOTH!",
-              answer: "SERENDIPITY (happy accident) and ANNOTATE (adding live notes/timestamps)!",
-              spanish: "Serendipity (hallazgo afortunado por casualidad) y annotate (anotar en directo)."
+              clue: "Which actor—already an Oscar winner for 'Oppenheimer'—is returning to the Marvel franchise in 'Avengers: Doomsday' as the iconic villain Doctor Doom?",
+              answer: "ROBERT DOWNEY JR.! (Switching from Iron Man to Doctor Doom.)",
+              spanish: "Robert Downey Jr. (regresa a Marvel como Doctor Doom)."
             },
             {
-              clue: "⚡ Boss Level! Complete this C1 idiom and make a bold prediction about your English in 6 months: 'Soon, speaking directly in English will become ________ ________!'",
-              answer: "SECOND NATURE! (So instinctive you don't even think about grammar rules.)",
-              spanish: "Second nature (una segunda naturaleza): algo automático e instintivo."
+              clue: "In 'The Lord of the Rings: The Two Towers', Viggo Mortensen (Aragorn) lets out a famous agonizing scream after kicking an iron helmet. Why was that scream 100% real?",
+              answer: "He actually BROKE TWO TOES kicking the heavy metal helmet—and Peter Jackson kept the take in the movie!",
+              spanish: "Se rompió dos dedos del pie de verdad al patear el casco de hierro."
             }
           ]
         },
         {
-          title: "2. Hollywood vs. Cinema 🎬",
+          title: "2. Movie Craft & Critique 🎥",
           clues: [
             {
-              clue: "📵 Phone Detox! Why is a dark movie theater with popcorn better than watching Netflix on your couch? Answer in 2 punchy sentences using UNPLUG and IMMERSIVE!",
-              answer: "At the cinema you UNPLUG from your phone for two hours and get a totally IMMERSIVE, communal experience!",
-              spanish: "Unplug (desconectar del móvil) + immersive (inmersivo/envolvente)."
+              clue: "What 2-word film term describes the emotional journey and growth a character goes through from the beginning of a movie to the end?",
+              answer: "CHARACTER ARC (or STORY ARC)! Without one, heroes feel flat or 'not fleshed out'.",
+              spanish: "Arco de personaje (character arc)."
             },
             {
-              clue: "🦸‍♂️ Roast a Bad Blockbuster! In Lesson 2, Louie roasted 'The Rings of Power' for having an 'overpowered protagonist'. Use FLESHED OUT or CHARACTER ARC to roast a bad movie!",
-              answer: "Example: 'The hero was overpowered—the characters weren't FLESHED OUT and had no real CHARACTER ARC!'",
-              spanish: "Not fleshed out (poco desarrollados) / character arc (arco de personaje)."
+              clue: "According to legendary director Alexander Mackendrick ('On Filmmaking'), a truly well-directed movie should still be understandable even if you turn OFF what?",
+              answer: "THE SOUND / AUDIO! Visual storytelling should carry the story on its own.",
+              spanish: "El sonido / audio: una gran película debe entenderse solo con imágenes."
             },
             {
-              clue: "🔥 Marvel Hype Machine! Robert Downey Jr. is returning as Doctor Doom in 'Avengers: Doomsday'. Pitch the trailer in 2 excited sentences using BLOCKBUSTER, FRANCHISE, and HYPE!",
-              answer: "Example: 'The biggest BLOCKBUSTER in the Marvel FRANCHISE is creating insane HYPE by bringing RDJ back as Doctor Doom!'",
-              spanish: "Blockbuster (taquillazo), franchise (franquicia) y hype (gran expectación)."
+              clue: "What is the difference between a BLOCKBUSTER and an INDIE FILM—and which one usually takes bigger creative risks?",
+              answer: "A BLOCKBUSTER is a huge-budget studio hit aimed at mass audiences; an INDIE FILM is independently funded and often takes bolder artistic risks.",
+              spanish: "Blockbuster (gran presupuesto comercial) frente a indie film (cine independiente)."
             },
             {
-              clue: "💸 Studio Exec Challenge! Why do modern 3-hour masterpieces struggle against short, fast movies? Nail Louie's crisp line about 'changing consumer habits' and 'format'!",
-              answer: "'Commercialization is an issue because of changing consumer habits that do not fit the current format.'",
-              spanish: "Hábitos de consumo cambiantes que no encajan con el formato tradicional."
+              clue: "In film criticism, what does CINEMATIC RESTRAINT mean? Give an example of a scary or emotional scene that works better by NOT showing everything.",
+              answer: "Evoking powerful emotion through subtlety, silence, or off-screen suggestion rather than explicit shock or melodrama.",
+              spanish: "Contención cinematográfica: sugerir en lugar de mostrarlo todo explícitamente."
             },
             {
-              clue: "🎥 Director's Masterclass! How does 'The Zone of Interest' terrify the audience WITHOUT ever showing what happens inside Auschwitz? Name the C1 two-word technique!",
-              answer: "CINEMATIC RESTRAINT! (Using sound, contrast, and off-screen suggestion instead of cheap melodrama.)",
-              spanish: "Contención cinematográfica (cinematic restraint): sugerir con sutileza y sonido."
+              clue: "What do movie critics mean when they complain about an 'OVERPOWERED PROTAGONIST' and 'ZERO STAKES'?",
+              answer: "A hero whose powers come with no effort or real danger—so the audience never feels tension or risk.",
+              spanish: "Protagonista invencible (overpowered) sin riesgo real (stakes)."
             }
           ]
         },
         {
-          title: "3. Drama, Secrets & Emotions 🎭",
+          title: "3. Wild English Idioms 🦁",
           clues: [
             {
-              clue: "🕵️‍♂️ Detective Mode! Your coworker says 'I didn't eat your lunch'—with chocolate on his face. Give Louie's 1-word food idiom for 'sus / suspicious'!",
-              answer: "FISHY! ('Something about that excuse smells/looks FISHY!')",
-              spanish: "Fishy (turbio / sospechoso, que da mala espina)."
+              clue: "If someone tells you a business deal or an excuse 'sounds a bit FISHY', what do they mean?",
+              answer: "It seems SUSPICIOUS, shady, or hard to trust!",
+              spanish: "Suena turbio / sospechoso (que da mala espina)."
             },
             {
-              clue: "💘 Puppy Love vs. Golden Retriever! Act out or explain the difference between being AFFECTIONATE (like a friendly dog) and INFATUATED (like a sudden teen crush)!",
-              answer: "AFFECTIONATE = warm, gentle care; INFATUATED = sudden, intense, blind romantic obsession!",
-              spanish: "Affectionate (cariñoso) vs infatuated (encaprichado/obsesionado)."
+              clue: "Animal Group Quiz! What is the poetic English collective noun for a flock of CROWS?",
+              answer: "A MURDER of crows!",
+              spanish: "Una bandada de cuervos (a murder of crows)."
             },
             {
-              clue: "🙏 Plot Twist: Saying 'sorry' isn't weak! Which B2 adjective describes someone who apologizes thoughtfully and politely when they bump into you?",
-              answer: "APOLOGETIC! ('Being apologetic is considerate and polite, not weak.')",
-              spanish: "Apologetic (arrepentido / educado al disculparse)."
+              clue: "Double Animal Quiz! What do we call a family of LIONS—and what do we call a noisy group of GEESE?",
+              answer: "A PRIDE of lions, and a GAGGLE of geese!",
+              spanish: "A pride of lions (manada de leones) y a gaggle of geese (bandada de gansos)."
             },
             {
-              clue: "📱 Social Media Trap! You see everyone in Bali while you're at the office—hello FOMO! Finish Louie's classic English proverb: 'Comparison is the ________ of ________.'",
+              clue: "Complete this classic proverb about jealousy and social media: 'Comparison is the ________ of ________.'",
               answer: "Comparison is the THIEF OF JOY!",
               spanish: "La comparación es el ladrón de la alegría."
             },
             {
-              clue: "🧊 Chilling Memory! In 'Sophie's Choice' (Meryl Streep) and 'The Zone of Interest', characters bury dark truths. Which C1 verb means 'pushing down painful memories'—and what does 'chilling' mean?",
-              answer: "SUPPRESS (push down/hide memories) and CHILLING (making you feel eerie and cold inside)!",
-              spanish: "Suppress (reprimir recuerdos) y chilling (escalofriante)."
+              clue: "What does it mean to 'TURN THE OTHER CHEEK', and which formal C2 noun describes that patient self-control?",
+              answer: "To refuse to retaliate when someone wrongs you—demonstrating FORBEARANCE!",
+              spanish: "Poner la otra mejilla / tolerancia paciente (forbearance)."
             }
           ]
         },
         {
-          title: "4. False Friends & Wild Folklore 🦁",
+          title: "4. Spanish vs. English Traps 🇪🇸🇬🇧",
           clues: [
             {
-              clue: "🇪🇸 vs 🇬🇧 Trap! In Spain, 'orgullo' can sound stubborn. Why is it actually a compliment when an Englishman says 'You really take ________ in your work'?",
-              answer: "TAKE PRIDE IN! It means craftsmanship, care, and self-respect—NOT 'showing off'!",
-              spanish: "Take pride in (poner esmero y sentir satisfacción sana por tu trabajo), no 'showing off' (presumir)."
+              clue: "False Friend Alert! In Spanish, 'orgullo' often sounds stubborn. Why is 'You should take PRIDE in your work' a big compliment in English?",
+              answer: "Because 'taking pride in' means caring about quality, craftsmanship, and self-respect—not 'showing off'!",
+              spanish: "'Take pride in' significa esmerarse y sentir satisfacción sana, no presumir."
             },
             {
-              clue: "🦁 Safari Quick-Draw! A group of dogs is a pack, a group of fish is a school—what do we call a family of LIONS?",
-              answer: "A PRIDE of lions!",
-              spanish: "A pride of lions (una manada de leones)."
+              clue: "Spot the Grammar Trap! Which sentence is natural English? A) 'I look forward to do sports.'  B) 'I look forward to doing sports.'",
+              answer: "B! 'I look forward to DOING sports.' ('Look forward to' is always followed by -ing!)",
+              spanish: "Después de 'look forward to' siempre va gerundio (-ing)."
             },
             {
-              clue: "🐦‍⬛ Spooky Folklore! The AI note-taker heard 'a marr froz', but Tony nailed this poetic British collective noun on the first try! What is a flock of CROWS called?",
-              answer: "A MURDER of crows!",
-              spanish: "A murder of crows (una bandada de cuervos)."
+              clue: "Phone Habit Fix! Native speakers don't say 'watching my phone' when you check notifications. What are TWO natural verbs you can use instead?",
+              answer: "CHECKING my phone, LOOKING AT my phone, or UNPLUGGING from my phone!",
+              spanish: "Se dice 'checking my phone' o 'unplugging from my phone' (no 'watching')."
             },
             {
-              clue: "🪿 Double Goose Trouble! 1) What do we call a noisy group of GEESE? 2) Finish the proverb: 'What's good for the goose is good for the ________!'",
-              answer: "1) A GAGGLE of geese! 2) 'What's good for the goose is good for the GANDER!'",
-              spanish: "A gaggle of geese (bandada de gansos) + 'lo que vale para uno vale para el otro'."
+              clue: "What's the difference between CONSCIENCE (your inner moral voice) and CONSCIENTIOUS (a personality trait)?",
+              answer: "CONSCIENCE tells you right from wrong; CONSCIENTIOUS means diligent, careful, and thorough in your work!",
+              spanish: "Conscience (conciencia moral) frente a conscientious (concienzudo/diligente)."
             },
             {
-              clue: "😇 Inner Voice vs. Hard Worker! What's the difference between your CONSCIENCE (Jiminy Cricket on your shoulder) and being CONSCIENTIOUS? Bonus: what does 'turn the other cheek' mean?",
-              answer: "CONSCIENCE = inner moral voice; CONSCIENTIOUS = diligent & careful. 'Turn the other cheek' = refusing to retaliate (forbearance)!",
-              spanish: "Conscience (conciencia moral), conscientious (concienzudo), turn the other cheek (poner la otra mejilla)."
+              clue: "Upgrade 'spare time' and 'relax after work' using TWO natural B2 English words: 'In my ________, I love to ________.'",
+              answer: "In my DOWNTIME, I love to UNWIND!",
+              spanish: "Downtime (tiempo libre) y unwind (desconectar/relajarse)."
             }
           ]
         },
         {
-          title: "5. Heads Up & Glow-Up Polish 🗣️",
+          title: "5. World, Food & Brainteasers 🌍",
           clues: [
             {
-              clue: "🍝 Chef Tony's Geometry! Describe MEATBALLS like a Michelin-star physicist using the two B2 words Tony & Louie used for their shape and meat!",
-              answer: "SPHERICAL (shaped like a sphere) and MINCED (finely ground beef or pork)!",
-              spanish: "Spherical (esférico) y minced beef/pork (carne picada)."
+              clue: "Which 3-word English noun describes a narrow point in a pipe—or a mental traffic jam that slows down your speaking fluency?",
+              answer: "A BOTTLENECK! (1 word: bottleneck.)",
+              spanish: "Cuello de botella (bottleneck)."
             },
             {
-              clue: "🍨 Food & Sport Lightning Round! Fix these two AI note-taker disasters out loud: 1) 'Estra chaa... frozen gelado' 2) 'I play paddle!'",
-              answer: "1) STRACCIATELLA GELATO! 2) I play PADEL! (Plus PASTRAMI on a NY bagel and apple CIDER!)",
-              spanish: "Stracciatella gelato (helado italiano) y padel (pádel)."
+              clue: "Culinary Quiz! What is the difference between Italian GELATO and American ice cream (in texture, air, and serving temperature)?",
+              answer: "Gelato is churned slower (less air = denser & creamier), uses more milk than cream, and is served slightly warmer!",
+              spanish: "El gelato tiene menos aire, más leche que nata y se sirve un poco menos frío."
             },
             {
-              clue: "🛋️ 5 PM Office Escape! Upgrade Tony's sentence with Louie's favorite British relaxation verb: 'After work, I just want to go home and completely ________.'",
-              answer: "UNWIND! ('...head home and completely unwind.')",
-              spanish: "Unwind (desconectar y soltar el estrés después del trabajo)."
+              clue: "In New York delis, what cured, spiced, smoked beef brisket is famously stacked sky-high inside a bagel or rye bread?",
+              answer: "PASTRAMI!",
+              spanish: "El pastrami."
             },
             {
-              clue: "✨ Grammar Glow-Up! Catch the sneaky trap in: ❌ 'I look forward to do sports in my spare time.' Fix the verb AND upgrade 'spare time'!",
-              answer: "✅ 'I look forward to DOING sports in my DOWNTIME!' ('Look forward to' ALWAYS takes -ing!)",
-              spanish: "Tras 'look forward to' siempre va gerundio (-ing: doing) + 'downtime' (tiempo libre)."
+              clue: "Which global racket sport—invented in Mexico and massively popular across Spain—is played in doubles inside an enclosed glass court?",
+              answer: "PADEL!",
+              spanish: "El pádel."
             },
             {
-              clue: "📵 Cinema Glow-Up! Upgrade: ❌ 'I spend two hours without watching my phone.' Make it sound 100% native!",
-              answer: "✅ 'I spend two hours without CHECKING my phone—I completely UNPLUG and stay IMMERSED!'",
-              spanish: "En inglés se dice 'checking my phone' o 'unplugging', no 'watching my phone'."
+              clue: "Science Brainteaser! Why does inhaling helium make your voice sound like a cartoon chipmunk—even though helium does NOT change your vocal cord pitch?",
+              answer: "Sound travels ~3x faster in lighter helium than in air, shifting the resonant frequencies (timbre) of your throat!",
+              spanish: "El sonido viaja casi 3 veces más rápido en el helio, cambiando la resonancia de tu garganta."
             }
           ]
         }
       ],
       final: {
-        category: "THE OSCAR-WORTHY FINALE 🏆",
-        clue: "30-Second Director's Challenge: 1) Explain why 'The Zone of Interest' is 'chilling' using 'cinematic restraint'. 2) Say how rapid-fire games crush your mental 'bottleneck'. 3) Give a 15-second hot take on 'The Traitors' or 'La Bola Negra' using 'character arc'!",
-        answer: "Victory checklist: 1) 'Chilling/eerie' because it stays in the garden beside Auschwitz without showing violence. 2) Time pressure makes English 'second nature' without translating. 3) Crisp opinion with 'character arc', 'fleshed out', or 'stakes'!",
-        spanish: "Reto final: 1) Contención cinematográfica en 'The Zone of Interest', 2) Cómo romper el cuello de botella mental, 3) Opinión rápida usando 'character arc' o 'stakes'."
+        category: "THE ULTIMATE FILM & FLUENCY QUIZ 🏆",
+        clue: "3-Part Final Challenge: 1) Name one movie with a great 'character arc' and explain why in 2 sentences. 2) Explain the difference between 'unplugging' at the cinema vs. streaming at home. 3) Define 'serendipity' in your own words!",
+        answer: "Great answer hits: 1) Clear film example with 'character arc' or 'stakes'. 2) Contrast 'unplug / immersive / communal' vs checking phones at home. 3) Serendipity = finding something wonderful by happy accident!",
+        spanish: "Reto final: 1) Una película con gran arco de personaje, 2) Desconectar en el cine vs ver en casa, 3) Define 'serendipity'."
       }
     },
 
     tony_cinema: {
-      name: "Tony's Cinema, Culture & Rapid-Fire Drills 🍿",
+      name: "Tony's Film Buff & Hot-Take Quiz 🍿",
       categories: [
         {
-          title: "1. Tony's Chaotic Dinner Party 🍽️",
+          title: "1. Guess the Movie or Show 🍿",
           clues: [
             {
-              clue: "🍷 Guest #1: Tony joked he'd invite this actor ONLY because his girlfriend loves him ('Timothy Charlemagne' in the transcript!). Who is he—and what intense ping-pong movie did Louie mention him in?",
-              answer: "TIMOTHÉE CHALAMET—in 'Marty Supreme', where the STAKES keep rising every minute!",
-              spanish: "Timothée Chalamet (y 'Marty Supreme', donde la tensión/stakes no deja de subir)."
+              clue: "Which hit British reality game show locks contestants in a Scottish castle where secret 'Traitors' eliminate 'Faithfuls' every night?",
+              answer: "THE TRAITORS!",
+              spanish: "The Traitors (el concurso británico de estrategia y traiciones)."
             },
             {
-              clue: "🤡 Guest #2: Tony invited Joaquin Phoenix's JOKER to dinner! Bold choice—give a 15-second warning to the other guests about what might go wrong at dessert!",
-              answer: "Open fun answer! (Bonus points for using 'eerie', 'suspicious', 'suppress', or 'character arc'.)",
-              spanish: "Aviso divertido para los invitados sobre el Joker (usa eerie, suspicious o character arc)."
+              clue: "Which 2019 psychological thriller won Joaquin Phoenix the Best Actor Oscar for playing struggling stand-up comedian Arthur Fleck?",
+              answer: "JOKER!",
+              spanish: "Joker (2019), con Joaquin Phoenix."
             },
             {
-              clue: "🥔 Guest #3: Matt Damon in 'The Martian' shows up! If he had to cook dinner for the table using only Mars rations, what would he serve—and why is he the best survivalist guest?",
-              answer: "Potatoes! Mark Watney survives on Mars with science, humor, and zero self-pity.",
-              spanish: "Patatas marcianas: Mark Watney sobrevive con ciencia y sentido del humor."
+              clue: "In which 2014 Christopher Nolan sci-fi epic does Matthew McConaughey pilot a spacecraft through a wormhole near Saturn to save humanity?",
+              answer: "INTERSTELLAR!",
+              spanish: "Interstellar (2014), de Christopher Nolan."
             },
             {
-              clue: "🚀 Guest #4: Matthew McConaughey walks in saying 'Alright, alright, alright!' Which of his characters would you invite—Cooper ('Interstellar') or Rust ('True Detective')—and why?",
-              answer: "Open fun answer! Compare space-dad Cooper vs philosophical detective Rust Cohle.",
-              spanish: "¿Cooper de Interstellar o Rust de True Detective? Defiende tu elección."
+              clue: "Which actress holds the all-time record with 21 Oscar nominations (winning 3, including 'Sophie's Choice' and 'The Iron Lady')?",
+              answer: "MERYL STREEP!",
+              spanish: "Meryl Streep (21 nominaciones al Óscar)."
             },
             {
-              clue: "🗡️ After-Dinner Game! Tony is hooked on a British celebrity game show full of backstabbing, paranoia, and round-table accusations. Name it—and would YOU survive as a Traitor or a Faithful?",
-              answer: "THE TRAITORS! (Explain in 2 sentences whether you'd play a sneaky Traitor or a loyal Faithful.)",
-              spanish: "The Traitors: ¿sobrevivirías mejor como Traidor o como Fiel?"
+              clue: "Which young Franco-American actor starred in 'Dune', 'Call Me by Your Name', 'Wonka', and 'Marty Supreme'?",
+              answer: "TIMOTHÉE CHALAMET!",
+              spanish: "Timothée Chalamet."
             }
           ]
         },
         {
-          title: "2. Hot Takes & Filmmaking 🎥",
+          title: "2. Psychology & Nuance 🧠",
           clues: [
             {
-              clue: "📚 Book Club Pitch! Louie recommended Alexander Mackendrick's classic guide for directors. What's the 2-word title—and what's ONE thing you wish modern directors learned from it?",
-              answer: "ON FILMMAKING! (Great answer mentions character development, visual storytelling, or pacing.)",
-              spanish: "On Filmmaking, de Alexander Mackendrick."
+              clue: "What is the difference between being AFFECTIONATE and being INFATUATED? Which one lasts longer?",
+              answer: "AFFECTIONATE = warm, steady tenderness (family, pets, partners); INFATUATED = sudden, intense, short-lived obsession!",
+              spanish: "Affectionate (cariñoso/ternura duradera) frente a infatuated (encaprichado)."
             },
             {
-              clue: "🔇 The Mute-Button Test! Mackendrick says a truly great film should still make sense if you turn OFF what? Test this rule on a movie you love!",
-              answer: "THE AUDIO / SOUND! ('A well-made movie should be understandable with just images and no audio.')",
-              spanish: "El audio: una gran película se entiende solo con imágenes."
+              clue: "What does the acronym FOMO stand for—and what adjective describes the feeling when you wish you had what someone else has?",
+              answer: "Fear Of Missing Out — and ENVIOUS!",
+              spanish: "Fear Of Missing Out (miedo a perderse algo) y envious (envidioso)."
             },
             {
-              clue: "📱 Vertical Video Crime! Why does watching an epic movie on a phone screen ruin the director's vision? Defend the big screen using FORMAT and DIMENSIONS!",
-              answer: "Cinema has wide landscape DIMENSIONS (16:9), while phones force a narrow vertical FORMAT with endless close-ups!",
-              spanish: "Las dimensiones panorámicas del cine frente al formato vertical del móvil."
+              clue: "Which C1 verb means deliberately or subconsciously pushing down painful memories so you don't have to face them?",
+              answer: "SUPPRESS!",
+              spanish: "Suppress (reprimir o sofocar recuerdos/sentimientos)."
             },
             {
-              clue: "🖤 Indie vs. Popcorn! Tony loved a nearly 3-hour Spanish indie film with a rich character arc while Hollywood chases fast cash. Name that film—and why didn't the 3 hours feel long?",
-              answer: "LA BOLA NEGRA! (Because strong character arcs and real emotional stakes earn the runtime.)",
-              spanish: "La Bola Negra: casi 3 horas que valen la pena por su arco de personaje."
+              clue: "If a person is APOLOGETIC, are they weak, rude, or considerate?",
+              answer: "CONSIDERATE! It means acknowledging a mistake politely and thoughtfully.",
+              spanish: "Considerado y educado (considerate), nunca débil."
             },
             {
-              clue: "⚔️ Villain's Lawyer! Defend classic heroes like Neo ('The Matrix') or Anakin Skywalker against modern 'overpowered protagonists'—why do flaws make a hero cooler?",
-              answer: "Because abilities must come AT A COST—real STAKES and struggle create an unforgettable CHARACTER ARC!",
-              spanish: "Las habilidades deben costar esfuerzo: sin riesgo (stakes) no hay arco de personaje."
+              clue: "What 2-word noun describes the ongoing stream of thoughts, questions, and silent voice inside your own head?",
+              answer: "INNER MONOLOGUE!",
+              spanish: "Monólogo interior (inner monologue)."
             }
           ]
         },
         {
-          title: "3. Valencia, World & Weird Facts 🌍",
+          title: "3. Culture, Sport & Cities 🌍",
           clues: [
             {
-              clue: "🏰 Louie's Secret Past! Before teaching English, Louie rebuilt 700-year-old stone buildings in Oxfordshire. Name that C1 two-word craft—and the verb for bringing a street back to life!",
+              clue: "Which coastal Spanish city hosts one of Europe's most prestigious international film festivals every September (famous for the Golden Shell)?",
+              answer: "SAN SEBASTIÁN (Donostia)!",
+              spanish: "San Sebastián (la Concha de Oro)."
+            },
+            {
+              clue: "Which C1 two-word phrase describes rebuilding 700-year-old historic stone buildings—and which verb means bringing a whole street back to life?",
               answer: "ARCHITECTURAL RESTORATION and REVITALIZE!",
               spanish: "Architectural restoration (restauración arquitectónica) y revitalize (revitalizar)."
             },
             {
-              clue: "🚴‍♂️ Saturday Morning Roll-Out! Tell us about your Valencia cycling group in 2 energetic sentences—what's the best part of riding with a crew (coffee stop included)?",
-              answer: "Open fun answer! ('I go on a bike ride with my cycling group on Saturdays to unwind and enjoy the outdoors.')",
-              spanish: "Cuenta en 2 frases cómo son tus salidas en bici los sábados en Valencia."
+              clue: "What C1 noun names the coastal tidal swamp trees with dense, tangled roots that protect tropical shorelines?",
+              answer: "MANGROVES!",
+              spanish: "Los manglares (mangroves)."
             },
             {
-              clue: "🌴 Swamp Quiz! What C1 noun did Louie use for tropical trees with tangled roots growing in coastal tidal swamps (from the Heads Up fruit clue)?",
-              answer: "MANGROVE!",
-              spanish: "El manglar (mangrove)."
+              clue: "Which European country is home to Valencia—and what famous Sunday rice dish originated in its coastal lagoons?",
+              answer: "SPAIN — and PAELLA VALENCIANA!",
+              spanish: "España y la paella valenciana."
             },
             {
-              clue: "🎞️ Festival Face-Off! Contrast Spain's famous northern film festival with the free community screenings Louie mentioned in Vietnam—where would you rather spend a weekend?",
-              answer: "SAN SEBASTIÁN (Spain) vs. HANOI (Vietnam)!",
-              spanish: "Festival de San Sebastián frente a las proyecciones comunitarias de Hanói."
-            },
-            {
-              clue: "🤖 AI Note-Taker Hall of Fame! Which mishearing made you laugh more: 'Male stream' (Meryl Streep), 'Sabile' (Seville), or 'Bo, all neg' (bottleneck)? Say ALL THREE cleanly!",
-              answer: "MERYL STREEP, SEVILLE, and BOTTLENECK!",
-              spanish: "Pronuncia limpiamente: Meryl Streep, Seville y bottleneck."
+              clue: "Which 3-word phrase means a skill has become so automatic through practice that you do it without even thinking?",
+              answer: "SECOND NATURE! ('Speaking English is becoming second nature.')",
+              spanish: "Una segunda naturaleza (second nature)."
             }
           ]
         },
@@ -291,41 +291,41 @@
           ]
         },
         {
-          title: "5. 30-Second Hot-Seat Sprints ⏱️",
+          title: "5. 30-Second Hot-Take Sprints ⏱️",
           clues: [
             {
-              clue: "🔥 Hot Seat #1 (30s): Give your honest pitch for why adults should ditch mental translation—use BOTTLENECK and COHERENCE!",
-              answer: "Goal: 2–3 smooth, direct sentences without translating from Spanish.",
-              spanish: "Sprint de 30s usando 'bottleneck' y 'coherence'."
+              clue: "🔥 Hot Take #1 (30s): Are 3-hour movies worth it, or should most films stay under 100 minutes? Defend your stance!",
+              answer: "Goal: 2–3 punchy sentences using 'character arc', 'pacing', or 'stakes'.",
+              spanish: "¿Valen la pena las películas de 3 horas o mejor menos de 100 minutos? Defiéndelo en 30s."
             },
             {
-              clue: "🔥 Hot Seat #2 (30s): Would you rather live in a world with ZERO FOMO or ZERO embarrassment? Defend your choice in 30 seconds!",
+              clue: "🔥 Hot Take #2 (30s): Would you rather live in a world with ZERO FOMO or ZERO embarrassment? Choose one and explain why!",
               answer: "Goal: Quick, confident stance + 1 real-life example.",
-              spanish: "¿Preferirías vivir sin FOMO o sin vergüenza (embarrassment)? Defiéndelo en 30s."
+              spanish: "¿Preferirías vivir sin FOMO o sin vergüenza? Defiéndelo en 30s."
             },
             {
-              clue: "🔥 Hot Seat #3 (30s): Pitch a movie night to your friends—convince them to leave their phones in their pockets using UNPLUG and IMMERSIVE!",
+              clue: "🔥 Hot Take #3 (30s): Convince a friend to turn off their phone and go to the cinema tonight using UNPLUG and IMMERSIVE!",
               answer: "Goal: Persuasive, natural English using 'unplug' and 'immersive'.",
-              spanish: "Convence a tus amigos de apagar el móvil usando 'unplug' e 'immersive'."
+              spanish: "Convence a un amigo de ir al cine hoy usando 'unplug' e 'immersive'."
             },
             {
-              clue: "🔥 Hot Seat #4 (30s): Give a 30-second spoiler-free teaser for 'The Zone of Interest' using EERIE, CHILLING, and CINEMATIC RESTRAINT!",
-              answer: "Goal: Atmospheric summary highlighting the contrast between garden and camp wall.",
-              spanish: "Tráiler sin spoilers de 'The Zone of Interest' usando eerie, chilling y cinematic restraint."
+              clue: "🔥 Hot Take #4 (30s): Would you rather be a Traitor or a Faithful on 'The Traitors'—and what would be your strategy?",
+              answer: "Goal: Fun, spontaneous storytelling without translating word-for-word.",
+              spanish: "¿Preferirías ser Traidor o Fiel en 'The Traitors'? Explica tu estrategia."
             },
             {
-              clue: "🔥 Hot Seat #5 (30s): Sell Valencia's ultimate Saturday to Louie—include CYCLING, PADEL, UNWIND, and DOWNTIME!",
-              answer: "Goal: Vivid storytelling with zero 'look forward to do' or 'watching my phone' slips!",
-              spanish: "Vende el sábado perfecto en Valencia usando cycling, padel, unwind y downtime."
+              clue: "🔥 Hot Take #5 (30s): Pitch your ideal Saturday in Valencia—include CYCLING, PADEL, UNWIND, and DOWNTIME!",
+              answer: "Goal: Smooth, natural English using 'look forward to doing'!",
+              spanish: "Describe tu sábado ideal en Valencia usando cycling, padel, unwind y downtime."
             }
           ]
         }
       ],
       final: {
-        category: "THE 60-SECOND PREPLY REVIEW CHALLENGE 🎙️",
-        clue: "Louie's Ultimate Test: Review any movie or series you watched recently (or 'The Zone of Interest' / 'The Traitors') in 45–60 seconds! Hit all 3: 1) Did it meet your expectations? 2) Did the characters have a real arc? 3) Could it pass the 'No-Audio Visual Test'?",
+        category: "THE 60-SECOND FILM REVIEW CHALLENGE 🎙️",
+        clue: "Review any movie or series you watched recently in 45–60 seconds! Answer all 3: 1) Did it meet your expectations? 2) Did the characters have a proper arc? 3) Could the story be told with images alone and no audio?",
         answer: "A fluent, confident mini-review using natural cinema vocabulary ('character arc', 'stakes', 'fleshed out', 'cinematic restraint', 'immersive')!",
-        spanish: "Reto de reseña en 60s: 1) ¿Cumplió expectativas? 2) ¿Hubo buen arco de personaje? 3) ¿Pasaría la prueba visual sin audio?"
+        spanish: "Reto de reseña en 60s: 1) ¿Cumplió expectativas? 2) ¿Hubo buen arco de personaje? 3) ¿Se entendería solo con imágenes sin audio?"
       }
     }
   };
